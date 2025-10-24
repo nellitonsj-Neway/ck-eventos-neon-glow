@@ -5,6 +5,10 @@ import Calculator from '@/components/sections/Calculator';
 import Services from '@/components/sections/Services';
 import Gallery from '@/components/sections/Gallery';
 import Testimonials from '@/components/sections/Testimonials';
+import About from '@/components/sections/About';
+import Corporate from '@/components/sections/Corporate';
+import FAQ from '@/components/sections/FAQ';
+import Contact from '@/components/sections/Contact';
 import CTABanner from '@/components/sections/CTABanner';
 import Footer from '@/components/sections/Footer';
 import ScrollProgress from '@/components/ui/scroll-progress';
@@ -29,6 +33,10 @@ const Index = () => {
         <Gallery />
         <Testimonials />
         <CTABanner variant="testimonials" />
+        <About />
+        <Corporate />
+        <FAQ />
+        <Contact />
       </main>
       
       <Footer />

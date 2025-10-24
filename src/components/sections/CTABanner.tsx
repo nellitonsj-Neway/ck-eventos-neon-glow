@@ -1,12 +1,21 @@
 import { Button } from '@/components/ui/button';
-import { MessageCircle, Calculator, Sparkles } from 'lucide-react';
+import { MessageCircle, Calculator, Sparkles, LucideIcon } from 'lucide-react';
 import { useParallax } from '@/hooks/useParallax';
 
 interface CTABannerProps {
   variant: 'calculator' | 'services' | 'testimonials';
 }
 
-const variants = {
+interface VariantConfig {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  action: string;
+  href?: string;
+  whatsapp?: boolean;
+}
+
+const variants: Record<string, VariantConfig> = {
   calculator: {
     title: 'Pronto para calcular seu orçamento?',
     description: 'Use nossa calculadora gratuita e descubra o investimento ideal para seu evento',
