@@ -22,6 +22,9 @@ All colors MUST be HSL.
     --muted-foreground: 0 0% 65%;
     --accent: 200 85% 60%;
     --accent-foreground: 0 0% 100%;
+    --accent-warm: 30 100% 65%;
+    --accent-gold: 45 100% 60%;
+    --success: 150 80% 55%;
     --destructive: 0 85% 60%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 20%;
@@ -68,10 +71,34 @@ All colors MUST be HSL.
     background-clip: text;
   }
   
+  .text-gradient-warm {
+    background: linear-gradient(135deg, 
+      hsl(var(--primary)), 
+      hsl(var(--accent-warm))
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
   .bg-gradient-neon {
     background: linear-gradient(135deg, 
       hsl(var(--primary) / 0.1), 
       hsl(var(--secondary) / 0.1)
+    );
+  }
+  
+  .bg-gradient-subtle {
+    background: linear-gradient(180deg, 
+      hsl(var(--background)), 
+      hsl(var(--primary) / 0.05)
+    );
+  }
+  
+  .bg-gradient-warm {
+    background: linear-gradient(135deg, 
+      hsl(var(--accent-warm) / 0.1), 
+      hsl(var(--accent-gold) / 0.1)
     );
   }
   
@@ -80,6 +107,10 @@ All colors MUST be HSL.
       hsl(var(--primary)), 
       hsl(var(--secondary))
     ) 1;
+  }
+  
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
   }
 }
 
