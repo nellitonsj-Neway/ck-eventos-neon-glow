@@ -6,8 +6,9 @@ import Step2Guests from '@/components/calculator/Step2Guests';
 import Step3Services from '@/components/calculator/Step3Services';
 import Step4Date from '@/components/calculator/Step4Date';
 import ResultScreen from '@/components/calculator/ResultScreen';
-import { CalculatorData, calculateBudget, Budget } from '@/utils/calculator';
+import { CalculatorData, ServiceSelection, calculateBudget, Budget } from '@/utils/calculator';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { BarType } from '@/config/pricing';
 
 export default function Calculator() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -18,8 +19,6 @@ export default function Calculator() {
     eventType: '',
     guests: 100,
     services: [],
-    barWithAlcohol: true,
-    photoBoothHours: 3,
   });
 
   const totalSteps = 4;
@@ -41,7 +40,6 @@ export default function Calculator() {
 
   const handleNext = () => {
     if (currentStep === totalSteps && canProceed()) {
-      // Calcular orçamento e mostrar resultado
       const budget = calculateBudget(calculatorData as CalculatorData);
       setBudget(budget);
       setShowResult(true);
@@ -66,10 +64,19 @@ export default function Calculator() {
       eventType: '',
       guests: 100,
       services: [],
-      barWithAlcohol: true,
-      photoBoothHours: 3,
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleServicesChange = (services: ServiceSelection[]) => {
+    setCalculatorData({ ...calculatorData, services });
+  };
+
+  const handleServiceOptionChange = (serviceId: string, options: { barType?: BarType; hours?: number }) => {
+    const updatedServices = (calculatorData.services || []).map((s) =>
+      s.serviceId === serviceId ? { ...s, ...options } : s
+    );
+    setCalculatorData({ ...calculatorData, services: updatedServices });
   };
 
   if (showResult && budget) {
@@ -114,17 +121,8 @@ export default function Calculator() {
             <Step3Services
               selectedServices={calculatorData.services || []}
               eventTypeId={calculatorData.eventType || ''}
-              barWithAlcohol={calculatorData.barWithAlcohol}
-              photoBoothHours={calculatorData.photoBoothHours}
-              onServicesChange={(services) =>
-                setCalculatorData({ ...calculatorData, services })
-              }
-              onBarAlcoholChange={(barWithAlcohol) =>
-                setCalculatorData({ ...calculatorData, barWithAlcohol })
-              }
-              onPhotoBoothHoursChange={(photoBoothHours) =>
-                setCalculatorData({ ...calculatorData, photoBoothHours })
-              }
+              onServicesChange={handleServicesChange}
+              onServiceOptionChange={handleServiceOptionChange}
             />
           )}
 

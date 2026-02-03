@@ -21,7 +21,7 @@ const stats = [
   },
   {
     icon: '🏆',
-    value: 10,
+    value: 5,
     suffix: ' Anos',
     label: 'de Experiência',
   },

@@ -21,26 +21,23 @@ export default function About() {
             </div>
             
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient-primary">
-              Transformando Sonhos em Realidade Há 10 Anos
+              Transformando Sonhos em Realidade Há 5 Anos
             </h2>
 
             <div className="space-y-4 text-muted-foreground mb-8">
               <p>
-                Fundada em 2015 por <strong className="text-foreground">Karine e Philipe</strong>, 
+                Fundada em 2020 por <strong className="text-foreground">Karine e Philipe</strong>, 
                 a CK Eventos nasceu do sonho de criar experiências memoráveis e únicas. 
-                Começamos com pequenas festas de aniversário e hoje somos referência em eventos 
-                corporativos, casamentos e grandes celebrações em Belo Horizonte.
+                Começamos com pequenas festas de aniversário e hoje somos referência em 
+                Bar de Drinks, Experiências Interativas e Estações Gourmet em Belo Horizonte.
+              </p>
+              <p className="text-lg font-medium text-foreground italic border-l-4 border-primary pl-4">
+                "Aqui você não contrata apenas drinks, contrata tranquilidade."
               </p>
               <p>
                 Nossa missão é transformar cada evento em uma experiência inesquecível, 
-                cuidando de todos os detalhes com dedicação e profissionalismo. Acreditamos 
-                que cada cliente merece um evento único, que reflita sua personalidade e 
-                supere suas expectativas.
-              </p>
-              <p>
-                Com uma equipe de mais de 20 profissionais especializados, oferecemos 
-                suporte completo do planejamento à execução, garantindo que você possa 
-                aproveitar cada momento sem preocupações.
+                cuidando de todos os detalhes com dedicação e profissionalismo. Nossa 
+                Plataforma 360° utiliza iPhone 14 Plus para gravações de altíssima qualidade.
               </p>
             </div>
 

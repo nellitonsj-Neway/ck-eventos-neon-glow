@@ -1,6 +1,7 @@
 import { Budget, CalculatorData } from '@/utils/calculator';
 import { getEventTypeById } from '@/config/eventTypes';
 import { getServiceById } from '@/config/services';
+import { getBarMenu } from '@/config/pricing';
 import { formatCurrency, formatDate, getDayOfWeek } from '@/utils/formatters';
 import { sendCalculatorToWhatsApp } from '@/lib/whatsapp';
 import { Button } from '@/components/ui/button';
@@ -69,6 +70,12 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
             {formatCurrency(animatedMin)} - {formatCurrency(animatedMax)}
           </div>
           
+          {budget.hasConsultationItems && (
+            <div className="text-sm text-amber-500 font-medium">
+              ⚠️ Alguns serviços têm preço sob consulta e não estão incluídos neste valor
+            </div>
+          )}
+          
           <div className="pt-4 border-t border-primary/20">
             <p className="text-sm text-muted-foreground flex items-start gap-2 justify-center">
               <span>⚠️</span>
@@ -108,20 +115,25 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
               🎯 Serviços Selecionados:
             </div>
             <ul className="space-y-1 ml-6">
-              {data.services.map((serviceId) => {
-                const service = getServiceById(serviceId);
-                let serviceName = service?.name || serviceId;
+              {data.services.map((selection) => {
+                const service = getServiceById(selection.serviceId);
+                let serviceName = service?.name || selection.serviceId;
+                let details = '';
                 
-                if (serviceId === 'bar' && data.barWithAlcohol !== undefined) {
-                  serviceName += data.barWithAlcohol ? ' (com álcool)' : ' (sem álcool)';
+                if (selection.barType) {
+                  const menu = getBarMenu(selection.barType);
+                  details = ` (${menu?.name || selection.barType})`;
                 }
-                if (serviceId === 'photo-booth' && data.photoBoothHours) {
-                  serviceName += ` (${data.photoBoothHours}h)`;
+                if (selection.hours) {
+                  details = ` (${selection.hours}h)`;
+                }
+                if (service?.isUnderConsultation) {
+                  details += ' - Sob consulta';
                 }
                 
                 return (
-                  <li key={serviceId} className="text-muted-foreground">
-                    • {serviceName}
+                  <li key={selection.serviceId} className="text-muted-foreground">
+                    • {serviceName}{details}
                   </li>
                 );
               })}
