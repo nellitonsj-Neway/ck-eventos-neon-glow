@@ -11,13 +11,12 @@ export const images = {
   },
   services: {
     bar: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070',
-    photoBooth: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069',
-    ceremony: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=2070',
+    plataforma360: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=2070',
+    cabineFotos: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069',
+    totem: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=2070',
     acai: 'https://images.unsplash.com/photo-1488900128323-21503983a07e?q=80&w=2070',
+    milkshake: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=2070',
     fondue: 'https://images.unsplash.com/photo-1530597528568-f268be7e1f3f?q=80&w=2071',
-    sound: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=2070',
-    decoration: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=2069',
-    buffet: 'https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=2070',
   },
   gallery: {
     wedding1: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070',

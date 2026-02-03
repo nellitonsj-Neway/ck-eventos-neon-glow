@@ -1,6 +1,7 @@
 import { CalculatorData, Budget } from '@/utils/calculator';
 import { getEventTypeById } from '@/config/eventTypes';
 import { getServiceById } from '@/config/services';
+import { getBarMenu } from '@/config/pricing';
 import { formatCurrency, formatDate } from '@/utils/formatters';
 
 const WHATSAPP_NUMBER = '5531993436059';
@@ -13,21 +14,29 @@ export function formatCalculatorMessage(
   const eventName = eventType ? `${eventType.emoji} ${eventType.name}` : data.eventType;
   
   const servicesText = data.services
-    .map((serviceId) => {
-      const service = getServiceById(serviceId);
-      let serviceName = service?.name || serviceId;
+    .map((selection) => {
+      const service = getServiceById(selection.serviceId);
+      let serviceName = service?.name || selection.serviceId;
       
       // Adicionar detalhes específicos
-      if (serviceId === 'bar' && data.barWithAlcohol !== undefined) {
-        serviceName += data.barWithAlcohol ? ' (com álcool)' : ' (sem álcool)';
+      if (selection.barType) {
+        const menu = getBarMenu(selection.barType);
+        serviceName += ` (${menu?.name || selection.barType})`;
       }
-      if (serviceId === 'photo-booth' && data.photoBoothHours) {
-        serviceName += ` (${data.photoBoothHours}h)`;
+      if (selection.hours) {
+        serviceName += ` (${selection.hours}h)`;
+      }
+      if (service?.isUnderConsultation) {
+        serviceName += ' - Sob consulta';
       }
       
       return `✓ ${serviceName}`;
     })
     .join('\n');
+
+  const consultationNote = budget.hasConsultationItems 
+    ? '\n\n⚠️ *Nota:* Alguns serviços têm preço sob consulta e não estão incluídos na estimativa acima.'
+    : '';
 
   const message = `🎉 *Solicitação de Orçamento - CK Eventos*
 
@@ -42,7 +51,7 @@ Data Pretendida: ${formatDate(data.date)}
 ${servicesText}
 
 💰 *Estimativa Calculada:*
-${formatCurrency(budget.min)} - ${formatCurrency(budget.max)}
+${formatCurrency(budget.min)} - ${formatCurrency(budget.max)}${consultationNote}
 
 Aguardo retorno para mais informações! 🙏`;
 
