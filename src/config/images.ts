@@ -15,7 +15,7 @@ export const images = {
     totem: '/images/experiencias/setup_completo_ck.jpg',
     acai: 'https://images.unsplash.com/photo-1488900128323-21503983a07e?q=80&w=2070',
     milkshake: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=2070',
-    fondue: 'https://images.unsplash.com/photo-1530597528568-f268be7e1f3f?q=80&w=2071',
+    fondue: '/images/gourmet/carrinho_fondue.png',
   },
   gallery: {
     wedding1: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070',
