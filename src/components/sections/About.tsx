@@ -66,8 +66,8 @@ export default function About() {
                 aspectRatio="3/4"
               />
               <LazyImage
-                src={images.team.equipe_letsparty}
-                alt="Equipe CK Eventos - Let's Party"
+                src={images.team.team1}
+                alt="Philipe e Karine - CK Eventos"
                 className="rounded-lg"
                 aspectRatio="4/3"
               />
@@ -80,8 +80,8 @@ export default function About() {
                 aspectRatio="3/4"
               />
               <LazyImage
-                src={images.team.equipe_15anos}
-                alt="Equipe CK Eventos em festa de 15 Anos"
+                src={images.team.team2}
+                alt="Philipe e Karine - Quem Somos"
                 className="rounded-lg"
                 aspectRatio="4/3"
               />
