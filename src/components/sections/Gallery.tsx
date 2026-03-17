@@ -4,7 +4,7 @@ import LazyImage from '@/components/ui/lazy-image';
 import Lightbox from '@/components/ui/lightbox';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-type GalleryFilter = 'all' | 'wedding' | 'sweet15' | 'corporate' | 'birthday';
+type GalleryFilter = 'all' | 'wedding' | 'sweet15' | 'corporate' | 'birthday' | 'bar';
 
 interface GalleryImage {
   src: string;
@@ -23,8 +23,21 @@ const galleryImages: GalleryImage[] = [
   { src: images.gallery.corporate2, alt: 'Evento Corporativo 2', category: ['corporate'] },
   { src: images.gallery.birthday1, alt: 'Aniversário 1', category: ['birthday'] },
   { src: images.gallery.birthday2, alt: 'Aniversário 2', category: ['birthday'] },
-  { src: images.gallery.bar, alt: 'Bar de Drinks', category: ['wedding', 'birthday'] },
   { src: images.gallery.booth, alt: 'Cabine de Fotos', category: ['sweet15', 'birthday'] },
+  // Bar de Drinks - fotos reais
+  { src: images.gallery.bar1, alt: 'Bar de Drinks - Ambiente', category: ['bar', 'wedding', 'birthday'] },
+  { src: images.gallery.bar2, alt: 'Bar de Drinks - Letreiro Iluminado', category: ['bar', 'wedding'] },
+  { src: images.gallery.bar3, alt: 'Bar de Drinks - Cliente com Drink', category: ['bar', 'wedding'] },
+  { src: images.gallery.bar4, alt: 'Bar de Drinks - Coqueteleira e Frutas', category: ['bar'] },
+  { src: images.gallery.bar5, alt: 'Bar de Drinks - Morangos', category: ['bar'] },
+  { src: images.gallery.bar6, alt: 'Bar de Drinks - Cliente com Drink 2', category: ['bar', 'birthday'] },
+  { src: images.gallery.bar7, alt: 'Bar de Drinks - Banheirinha Azul', category: ['bar', 'birthday'] },
+  { src: images.gallery.bar8, alt: 'Bar de Drinks - Banheirinha Azul 2', category: ['bar'] },
+  { src: images.gallery.bar9, alt: 'CK Eventos - Folder', category: ['bar', 'wedding', 'birthday'] },
+  { src: images.gallery.bar10, alt: 'Bar de Drinks - Drink na Mão', category: ['bar', 'wedding'] },
+  { src: images.gallery.bar11, alt: 'Bar de Drinks - Cliente com Drink 3', category: ['bar'] },
+  { src: images.gallery.bar12, alt: 'Bar de Drinks - Balcão', category: ['bar', 'wedding'] },
+  { src: images.gallery.bar13, alt: 'Bar de Drinks - Balcão 2', category: ['bar', 'wedding', 'birthday'] },
 ];
 
 export default function Gallery() {
@@ -49,8 +62,9 @@ export default function Gallery() {
 
         {/* Filters */}
         <Tabs value={filter} onValueChange={(v) => setFilter(v as GalleryFilter)} className="mb-12">
-          <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-5">
+          <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-6">
             <TabsTrigger value="all">Todos</TabsTrigger>
+            <TabsTrigger value="bar">Bar</TabsTrigger>
             <TabsTrigger value="wedding">Casamentos</TabsTrigger>
             <TabsTrigger value="sweet15">15 Anos</TabsTrigger>
             <TabsTrigger value="corporate">Corporativo</TabsTrigger>
