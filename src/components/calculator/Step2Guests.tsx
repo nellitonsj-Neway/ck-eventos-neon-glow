@@ -8,6 +8,9 @@ interface Step2GuestsProps {
 
 export default function Step2Guests({ guests, onGuestsChange }: Step2GuestsProps) {
   const markers = [50, 100, 200, 300, 400];
+  const min = 20;
+  const max = 500;
+  const range = max - min;
 
   return (
     <div className="space-y-8">
@@ -35,19 +38,35 @@ export default function Step2Guests({ guests, onGuestsChange }: Step2GuestsProps
           <Slider
             value={[guests]}
             onValueChange={(value) => onGuestsChange(value[0])}
-            min={20}
-            max={500}
+            min={min}
+            max={max}
             step={10}
             className="w-full"
           />
           
-          {/* Marcadores */}
-          <div className="flex justify-between text-xs text-muted-foreground px-2">
-            <span>20</span>
+          {/* Marcadores posicionados proporcionalmente */}
+          <div className="relative h-5 mx-2">
+            <span
+              className="absolute text-xs text-muted-foreground -translate-x-1/2"
+              style={{ left: '0%' }}
+            >
+              {min}
+            </span>
             {markers.map((marker) => (
-              <span key={marker}>{marker}</span>
+              <span
+                key={marker}
+                className="absolute text-xs text-muted-foreground -translate-x-1/2"
+                style={{ left: `${((marker - min) / range) * 100}%` }}
+              >
+                {marker}
+              </span>
             ))}
-            <span>500+</span>
+            <span
+              className="absolute text-xs text-muted-foreground -translate-x-1/2"
+              style={{ left: '100%' }}
+            >
+              {max}+
+            </span>
           </div>
         </div>
 
