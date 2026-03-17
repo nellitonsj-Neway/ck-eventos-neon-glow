@@ -94,7 +94,7 @@ export default function Privacy() {
             </ul>
             <p>
               Para exercer esses direitos, entre em contato conosco através do e-mail: 
-              contato@ckeventos.com.br
+              ckeventos.s@gmail.com
             </p>
           </section>
 
@@ -120,7 +120,7 @@ export default function Privacy() {
               Para dúvidas sobre esta Política de Privacidade, entre em contato:
             </p>
             <ul className="list-none space-y-2">
-              <li>📧 E-mail: contato@ckeventos.com.br</li>
+              <li>📧 E-mail: ckeventos.s@gmail.com</li>
               <li>📱 WhatsApp: (31) 99343-6059</li>
               <li>📍 Endereço: Belo Horizonte, MG</li>
             </ul>

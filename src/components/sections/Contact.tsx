@@ -230,8 +230,8 @@ export default function Contact() {
                 <Mail className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                 <div className="min-w-0">
                   <p className="font-semibold mb-1">Email</p>
-                  <a href="mailto:contato@ckeventos.com.br" className="text-muted-foreground hover:text-primary break-all">
-                    contato@ckeventos.com.br
+                  <a href="mailto:ckeventos.s@gmail.com" className="text-muted-foreground hover:text-primary break-all">
+                    ckeventos.s@gmail.com
                   </a>
                 </div>
               </div>
