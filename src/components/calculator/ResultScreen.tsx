@@ -69,7 +69,7 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
             Investimento Estimado
           </div>
           
-          <div className="text-2xl sm:text-4xl md:text-6xl font-bold text-gradient-primary">
+          <div className="text-xl sm:text-4xl md:text-6xl font-bold text-gradient-primary break-words">
             {formatCurrency(animatedMin)} - {formatCurrency(animatedMax)}
           </div>
           
