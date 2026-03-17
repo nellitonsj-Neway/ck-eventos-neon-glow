@@ -74,7 +74,7 @@ export default function Step3Services({
           <div key={category} className="space-y-4">
             {/* Header da categoria */}
             <div className="flex items-center gap-3 pb-2 border-b border-border">
-              <span className="text-2xl">{categoryInfo.icon}</span>
+              <categoryInfo.icon className="w-6 h-6 text-primary" />
               <div>
                 <h3 className="text-xl font-bold">{categoryInfo.name}</h3>
                 <p className="text-sm text-muted-foreground">{categoryInfo.description}</p>
