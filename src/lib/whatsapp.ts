@@ -75,11 +75,11 @@ export function sendCalculatorToWhatsApp(
   const message = formatCalculatorMessage(data, budget);
   const encodedMessage = encodeURIComponent(message);
   const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-  window.open(whatsappURL, '_blank');
+  openWhatsApp(whatsappURL);
 }
 
 export function sendSimpleWhatsAppMessage(message: string): void {
   const encodedMessage = encodeURIComponent(message);
   const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-  window.open(whatsappURL, '_blank');
+  openWhatsApp(whatsappURL);
 }

@@ -62,7 +62,13 @@ export default function Contact() {
         eventType: data.eventType,
         message: data.message,
       });
-      window.open(whatsappUrl, '_blank');
+      const a = document.createElement('a');
+      a.href = whatsappUrl;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
       
       toast({
         title: 'Mensagem enviada!',

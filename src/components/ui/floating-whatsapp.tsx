@@ -1,11 +1,10 @@
-import { Button } from './button';
+import { sendSimpleWhatsAppMessage } from '@/lib/whatsapp';
 
 export default function FloatingWhatsApp() {
   const handleClick = () => {
-    const message = encodeURIComponent(
+    sendSimpleWhatsAppMessage(
       'Olá! Vim pelo site e gostaria de mais informações sobre os serviços da CK Eventos!'
     );
-    window.open(`https://wa.me/5531993436059?text=${message}`, '_blank');
   };
 
   return (
