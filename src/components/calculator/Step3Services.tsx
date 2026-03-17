@@ -150,7 +150,7 @@ export default function Step3Services({
                           className="mt-1"
                         />
                         
-                        <div className="flex-1 pr-24">
+                        <div className="flex-1 pr-2 sm:pr-24">
                           <div className="flex items-center gap-2 mb-2">
                             <Icon className="w-5 h-5 text-primary" />
                             <Label
