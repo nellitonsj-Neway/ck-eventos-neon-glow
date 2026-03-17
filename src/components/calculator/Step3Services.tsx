@@ -111,37 +111,13 @@ export default function Step3Services({
                   <div key={service.id} className="space-y-3">
                     <div
                       className={cn(
-                        "relative p-4 rounded-lg border-2 transition-all duration-300 cursor-pointer",
+                        "p-4 rounded-lg border-2 transition-all duration-300 cursor-pointer",
                         isSelected
                           ? "border-primary bg-primary/10"
                           : "border-border bg-card hover:border-primary/50"
                       )}
                       onClick={() => handleServiceToggle(service.id)}
                     >
-                      {/* Badges */}
-                      <div className="absolute top-2 right-2 flex flex-wrap gap-1 sm:gap-2 max-w-[50%] justify-end">
-                        {isSelected && estimatedPrice !== null && (
-                          <Badge variant="default" className="bg-primary text-primary-foreground font-bold">
-                            {formatCurrency(estimatedPrice)}
-                          </Badge>
-                        )}
-                        {isSelected && estimatedPrice === null && (
-                          <Badge variant="outline" className="border-amber-500 text-amber-500">
-                            Sob consulta
-                          </Badge>
-                        )}
-                        {service.badge && !isSelected && (
-                          <Badge variant="default" className="bg-accent text-accent-foreground">
-                            {service.badge}
-                          </Badge>
-                        )}
-                        {isRecommended && (
-                          <Badge variant="outline" className="border-primary text-primary">
-                            RECOMENDADO
-                          </Badge>
-                        )}
-                      </div>
-
                       <div className="flex items-start gap-4">
                         <Checkbox
                           id={service.id}
@@ -150,9 +126,9 @@ export default function Step3Services({
                           className="mt-1"
                         />
                         
-                        <div className="flex-1 pr-2 sm:pr-24">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Icon className="w-5 h-5 text-primary" />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap mb-2">
+                            <Icon className="w-5 h-5 text-primary flex-shrink-0" />
                             <Label
                               htmlFor={service.id}
                               className="text-lg font-semibold cursor-pointer"
@@ -160,6 +136,31 @@ export default function Step3Services({
                               {service.name}
                             </Label>
                           </div>
+
+                          {/* Badges inline */}
+                          <div className="flex flex-wrap gap-1 mb-2">
+                            {isSelected && estimatedPrice !== null && (
+                              <Badge variant="default" className="bg-primary text-primary-foreground font-bold">
+                                {formatCurrency(estimatedPrice)}
+                              </Badge>
+                            )}
+                            {isSelected && estimatedPrice === null && (
+                              <Badge variant="outline" className="border-amber-500 text-amber-500">
+                                Sob consulta
+                              </Badge>
+                            )}
+                            {service.badge && !isSelected && (
+                              <Badge variant="default" className="bg-accent text-accent-foreground">
+                                {service.badge}
+                              </Badge>
+                            )}
+                            {isRecommended && (
+                              <Badge variant="outline" className="border-primary text-primary">
+                                RECOMENDADO
+                              </Badge>
+                            )}
+                          </div>
+
                           <p className="text-sm text-muted-foreground">
                             {service.description}
                           </p>
