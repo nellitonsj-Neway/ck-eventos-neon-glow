@@ -6,6 +6,7 @@ import {
   IceCream,
   CakeSlice,
   Milk,
+  ChefHat,
 } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
 
@@ -17,33 +18,32 @@ export interface Service {
   icon: LucideIcon;
   description: string;
   category: ServiceCategory;
-  recommended?: string[]; // IDs dos tipos de eventos recomendados
-  hasBarTypeOption?: boolean; // Para selecionar Essencial ou Exclusive
-  hasHoursOption?: boolean; // Para experiências com duração
-  isUnderConsultation?: boolean; // Para serviços sem preço fixo
-  badge?: string; // Ex: "Best-Seller", "Novidade"
+  recommended?: string[];
+  hasBarTypeOption?: boolean;
+  hasHoursOption?: boolean;
+  isUnderConsultation?: boolean;
+  badge?: string;
 }
 
-export const serviceCategories: Record<ServiceCategory, { name: string; icon: string; description: string }> = {
+export const serviceCategories: Record<ServiceCategory, { name: string; icon: LucideIcon; description: string }> = {
   bar: {
     name: 'Bar de Drinks',
-    icon: '🍹',
+    icon: Wine,
     description: 'Drinks autorais e clássicos com atendimento profissional',
   },
   experiencias: {
     name: 'Experiências Interativas',
-    icon: '📸',
+    icon: Camera,
     description: 'Momentos únicos e recordações instantâneas',
   },
   gourmet: {
     name: 'Estação Gourmet',
-    icon: '🍫',
+    icon: ChefHat,
     description: 'Carrinhos temáticos como ilhas de sobremesa volantes',
   },
 };
 
 export const services: Service[] = [
-  // BAR DE DRINKS
   {
     id: 'bar',
     name: 'Bar de Drinks',
@@ -54,7 +54,6 @@ export const services: Service[] = [
     hasBarTypeOption: true,
     badge: 'Best-Seller',
   },
-  // EXPERIÊNCIAS INTERATIVAS
   {
     id: 'plataforma-360',
     name: 'Plataforma 360°',
@@ -83,7 +82,6 @@ export const services: Service[] = [
     hasHoursOption: true,
     badge: 'Compacto',
   },
-  // ESTAÇÃO GOURMET
   {
     id: 'carrinho-acai',
     name: 'Carrinho de Açaí',

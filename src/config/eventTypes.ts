@@ -1,7 +1,9 @@
+import { LucideIcon, Heart, Crown, Cake, PartyPopper, Flower2, Church, Baby, Gift, PawPrint, Users, Briefcase, GraduationCap, HeartHandshake, CookingPot, Sparkles } from 'lucide-react';
+
 export interface EventType {
   id: string;
   name: string;
-  emoji: string;
+  icon: LucideIcon;
   description: string;
   popular?: boolean;
 }
@@ -10,94 +12,94 @@ export const eventTypes: EventType[] = [
   {
     id: 'casamento',
     name: 'Casamento',
-    emoji: '💍',
+    icon: Heart,
     description: 'O dia mais especial de suas vidas',
     popular: true,
   },
   {
     id: '15anos',
     name: '15 Anos',
-    emoji: '👑',
+    icon: Crown,
     description: 'Celebração inesquecível da debutante',
     popular: true,
   },
   {
     id: 'aniversario-adulto',
     name: 'Aniversário Adulto',
-    emoji: '🎂',
+    icon: Cake,
     description: 'Comemore sua data especial com estilo',
     popular: true,
   },
   {
     id: 'aniversario-infantil',
     name: 'Aniversário Infantil',
-    emoji: '🎈',
+    icon: PartyPopper,
     description: 'Diversão garantida para os pequenos',
   },
   {
     id: 'bodas',
     name: 'Bodas',
-    emoji: '💐',
+    icon: Flower2,
     description: 'Renove seus votos com elegância',
   },
   {
     id: 'batizado',
     name: 'Batizado',
-    emoji: '👼',
+    icon: Church,
     description: 'Momento sagrado e especial',
   },
   {
     id: 'cha-bebe',
     name: 'Chá de Bebê',
-    emoji: '🍼',
+    icon: Baby,
     description: 'Celebre a chegada do bebê',
   },
   {
     id: 'cha-revelacao',
     name: 'Chá Revelação',
-    emoji: '🎀',
+    icon: Gift,
     description: 'Descubra o sexo do bebê com emoção',
   },
   {
     id: 'aniversario-pet',
     name: 'Aniversário de Pet',
-    emoji: '🐾',
+    icon: PawPrint,
     description: 'Festa especial para seu melhor amigo',
   },
   {
     id: 'confraternizacao',
     name: 'Confraternização',
-    emoji: '🎊',
+    icon: Users,
     description: 'Reunião especial entre amigos',
   },
   {
     id: 'evento-corporativo',
     name: 'Evento Corporativo',
-    emoji: '💼',
+    icon: Briefcase,
     description: 'Profissionalismo e sofisticação',
   },
   {
     id: 'formatura',
     name: 'Formatura',
-    emoji: '🎓',
+    icon: GraduationCap,
     description: 'Celebre sua conquista acadêmica',
   },
   {
     id: 'noivado',
     name: 'Noivado',
-    emoji: '💕',
+    icon: HeartHandshake,
     description: 'Oficialize seu compromisso',
   },
   {
     id: 'cha-panela',
     name: 'Chá de Panela',
-    emoji: '🫖',
+    icon: CookingPot,
     description: 'Monte sua casa com seus amigos',
   },
   {
     id: 'outros',
     name: 'Outro Evento',
-    emoji: '🎉',
+    icon: Sparkles,
     description: 'Eventos personalizados',
   },
 ];

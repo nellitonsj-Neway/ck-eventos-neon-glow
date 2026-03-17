@@ -137,7 +137,7 @@ export default function Step3Services({
                           </p>
                           {service.isUnderConsultation && (
                             <p className="text-xs text-amber-500 mt-1 font-medium">
-                              💰 Preço sob consulta (baseado no número de convidados)
+                              Preço sob consulta (baseado no número de convidados)
                             </p>
                           )}
                         </div>

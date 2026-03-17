@@ -1,5 +1,5 @@
 import { Slider } from '@/components/ui/slider';
-import { Users } from 'lucide-react';
+import { Users, Lightbulb } from 'lucide-react';
 
 interface Step2GuestsProps {
   guests: number;

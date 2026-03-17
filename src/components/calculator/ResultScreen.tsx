@@ -5,7 +5,7 @@ import { getBarMenu } from '@/config/pricing';
 import { formatCurrency, formatDate, getDayOfWeek } from '@/utils/formatters';
 import { sendCalculatorToWhatsApp } from '@/lib/whatsapp';
 import { Button } from '@/components/ui/button';
-import { MessageCircle, RefreshCcw } from 'lucide-react';
+import { MessageCircle, RefreshCcw, Sparkles, DollarSign, AlertTriangle, ClipboardList, Users, CalendarDays, Target } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface ResultScreenProps {
@@ -22,7 +22,6 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
   const dateStr = formatDate(data.date);
   const dayOfWeek = getDayOfWeek(data.date);
 
-  // Animação de contador
   useEffect(() => {
     const duration = 1500;
     const steps = 60;
@@ -47,12 +46,15 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
     sendCalculatorToWhatsApp(data, budget);
   };
 
+  const EventIcon = eventType?.icon;
+
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Título */}
       <div className="text-center">
+        <Sparkles className="w-10 h-10 mx-auto mb-3 text-primary" />
         <h2 className="text-4xl font-bold mb-2 text-gradient-primary">
-          🎉 Seu Orçamento Estimado
+          Seu Orçamento Estimado
         </h2>
         <p className="text-muted-foreground">
           Veja a estimativa para o seu evento
@@ -62,8 +64,9 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
       {/* Box do orçamento */}
       <div className="max-w-2xl mx-auto p-8 rounded-lg bg-gradient-neon border-2 border-primary glow-primary">
         <div className="text-center space-y-4">
-          <div className="text-lg font-medium text-muted-foreground">
-            💰 Investimento Estimado
+          <div className="text-lg font-medium text-muted-foreground flex items-center justify-center gap-2">
+            <DollarSign className="w-5 h-5" />
+            Investimento Estimado
           </div>
           
           <div className="text-5xl md:text-6xl font-bold text-gradient-primary">
@@ -71,14 +74,15 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
           </div>
           
           {budget.hasConsultationItems && (
-            <div className="text-sm text-amber-500 font-medium">
-              ⚠️ Alguns serviços têm preço sob consulta e não estão incluídos neste valor
+            <div className="text-sm text-amber-500 font-medium flex items-center justify-center gap-1.5">
+              <AlertTriangle className="w-4 h-4" />
+              Alguns serviços têm preço sob consulta e não estão incluídos neste valor
             </div>
           )}
           
           <div className="pt-4 border-t border-primary/20">
             <p className="text-sm text-muted-foreground flex items-start gap-2 justify-center">
-              <span>⚠️</span>
+              <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span className="max-w-md">
                 <strong>Valores aproximados.</strong> Para um orçamento detalhado e personalizado, 
                 converse com nossa equipe pelo WhatsApp!
@@ -91,28 +95,30 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
       {/* Resumo do evento */}
       <div className="max-w-2xl mx-auto p-6 rounded-lg bg-card border border-border">
         <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-          📋 Resumo do Evento
+          <ClipboardList className="w-5 h-5 text-primary" />
+          Resumo do Evento
         </h3>
         
         <div className="space-y-3 text-sm">
           <div className="flex items-center gap-2">
-            <span className="text-2xl">{eventType?.emoji}</span>
+            {EventIcon && <EventIcon className="w-5 h-5 text-primary" />}
             <span className="font-semibold">{eventType?.name}</span>
           </div>
           
           <div className="flex items-center gap-2 text-muted-foreground">
-            <span>👥</span>
+            <Users className="w-4 h-4" />
             <span>{data.guests} convidados</span>
           </div>
           
           <div className="flex items-center gap-2 text-muted-foreground">
-            <span>📅</span>
+            <CalendarDays className="w-4 h-4" />
             <span>{dateStr} ({dayOfWeek})</span>
           </div>
           
           <div className="pt-3 border-t border-border">
             <div className="font-semibold mb-2 flex items-center gap-2">
-              🎯 Serviços Selecionados:
+              <Target className="w-4 h-4 text-primary" />
+              Serviços Selecionados:
             </div>
             <ul className="space-y-1 ml-6">
               {data.services.map((selection) => {
