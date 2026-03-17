@@ -26,7 +26,7 @@ export default function Testimonials() {
         <Carousel
           opts={{ align: 'start', loop: true }}
           plugins={[Autoplay({ delay: 5000 })]}
-          className="max-w-6xl mx-auto"
+          className="max-w-6xl mx-auto px-8 sm:px-0"
         >
           <CarouselContent>
             {testimonials.map((testimonial) => (
