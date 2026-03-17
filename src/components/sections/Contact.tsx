@@ -148,7 +148,7 @@ export default function Contact() {
                         <SelectContent>
                           {eventTypes.map((type) => (
                             <SelectItem key={type.id} value={type.name}>
-                              {type.emoji} {type.name}
+                              {type.name}
                             </SelectItem>
                           ))}
                         </SelectContent>

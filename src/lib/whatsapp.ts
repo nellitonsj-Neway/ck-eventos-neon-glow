@@ -11,7 +11,7 @@ export function formatCalculatorMessage(
   budget: Budget
 ): string {
   const eventType = getEventTypeById(data.eventType);
-  const eventName = eventType ? `${eventType.emoji} ${eventType.name}` : data.eventType;
+  const eventName = eventType ? eventType.name : data.eventType;
   
   const servicesText = data.services
     .map((selection) => {
