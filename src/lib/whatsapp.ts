@@ -6,6 +6,16 @@ import { formatCurrency, formatDate } from '@/utils/formatters';
 
 const WHATSAPP_NUMBER = '5531993436059';
 
+function openWhatsApp(url: string): void {
+  const a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
 export function formatCalculatorMessage(
   data: CalculatorData,
   budget: Budget
