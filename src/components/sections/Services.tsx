@@ -73,7 +73,7 @@ export default function Services() {
             <div key={category} className="mb-16 last:mb-0">
               {/* Header da categoria */}
               <div className="flex items-center gap-4 mb-8">
-                <span className="text-4xl">{categoryInfo.icon}</span>
+                <categoryInfo.icon className="w-10 h-10 text-primary" />
                 <div>
                   <h3 className="text-2xl md:text-3xl font-bold text-gradient-primary">
                     {categoryInfo.name}
