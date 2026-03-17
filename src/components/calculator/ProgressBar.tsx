@@ -29,7 +29,7 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
               <div className="flex flex-col items-center gap-1.5">
                 <div
                   className={cn(
-                    "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 border-2",
+                    "w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-300 border-2",
                     isCompleted && "bg-primary border-primary text-primary-foreground",
                     isCurrent && "border-primary bg-primary/10 text-primary",
                     !isCompleted && !isCurrent && "border-muted bg-muted/30 text-muted-foreground"
@@ -43,7 +43,7 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
                 </div>
                 <span
                   className={cn(
-                    "text-xs font-medium transition-colors",
+                    "text-[10px] sm:text-xs font-medium transition-colors",
                     isCurrent ? "text-primary" : isCompleted ? "text-foreground" : "text-muted-foreground"
                   )}
                 >

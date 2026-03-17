@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { MessageCircle, Calculator, Sparkles, LucideIcon } from 'lucide-react';
 import { useParallax } from '@/hooks/useParallax';
+import { sendSimpleWhatsAppMessage } from '@/lib/whatsapp';
 
 interface CTABannerProps {
   variant: 'calculator' | 'services' | 'testimonials';
@@ -46,8 +47,7 @@ export default function CTABanner({ variant }: CTABannerProps) {
 
   const handleClick = () => {
     if (config.whatsapp) {
-      const message = encodeURIComponent('Olá! Gostaria de mais informações sobre os serviços da CK Eventos.');
-      window.open(`https://wa.me/5531993436059?text=${message}`, '_blank');
+      sendSimpleWhatsAppMessage('Olá! Gostaria de mais informações sobre os serviços da CK Eventos.');
     } else if (config.href) {
       document.querySelector(config.href)?.scrollIntoView({ behavior: 'smooth' });
     }

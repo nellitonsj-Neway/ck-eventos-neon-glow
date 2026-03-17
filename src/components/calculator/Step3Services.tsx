@@ -119,7 +119,7 @@ export default function Step3Services({
                       onClick={() => handleServiceToggle(service.id)}
                     >
                       {/* Badges */}
-                      <div className="absolute top-2 right-2 flex gap-2">
+                      <div className="absolute top-2 right-2 flex flex-wrap gap-1 sm:gap-2 max-w-[50%] justify-end">
                         {isSelected && estimatedPrice !== null && (
                           <Badge variant="default" className="bg-primary text-primary-foreground font-bold">
                             {formatCurrency(estimatedPrice)}
@@ -150,7 +150,7 @@ export default function Step3Services({
                           className="mt-1"
                         />
                         
-                        <div className="flex-1 pr-24">
+                        <div className="flex-1 pr-2 sm:pr-24">
                           <div className="flex items-center gap-2 mb-2">
                             <Icon className="w-5 h-5 text-primary" />
                             <Label
@@ -174,7 +174,7 @@ export default function Step3Services({
 
                     {/* Opção de tipo de Bar */}
                     {isSelected && service.hasBarTypeOption && (
-                      <div className="ml-12 p-4 rounded-lg bg-muted/50 space-y-4">
+                      <div className="ml-2 sm:ml-12 p-4 rounded-lg bg-muted/50 space-y-4">
                         <Label className="text-sm font-medium">Qual cardápio você prefere?</Label>
                         <RadioGroup
                           value={selection?.barType || 'exclusive'}
@@ -207,7 +207,7 @@ export default function Step3Services({
 
                     {/* Opção de horas para experiências */}
                     {isSelected && service.hasHoursOption && (
-                      <div className="ml-12 p-4 rounded-lg bg-muted/50 space-y-3">
+                      <div className="ml-2 sm:ml-12 p-4 rounded-lg bg-muted/50 space-y-3">
                         <Label className="text-sm font-medium">Por quantas horas?</Label>
                         <Select
                           value={selection?.hours?.toString() || '3'}

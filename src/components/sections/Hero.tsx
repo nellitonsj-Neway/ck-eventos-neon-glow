@@ -24,8 +24,8 @@ export default function Hero() {
       </div>
       
       {/* Animated glow orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-96 sm:h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-48 h-48 sm:w-96 sm:h-96 bg-secondary/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
 
       <div className="container mx-auto px-4 relative z-10 pt-20">
         <div className="text-center max-w-4xl mx-auto space-y-8">
@@ -39,7 +39,7 @@ export default function Hero() {
           </div>
 
           {/* Título principal */}
-          <h1 className="text-5xl md:text-7xl font-bold animate-fade-in drop-shadow-lg">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold animate-fade-in drop-shadow-lg">
             <span className="text-gradient-primary">
               Transformamos Momentos
             </span>
@@ -50,7 +50,7 @@ export default function Hero() {
           </h1>
 
           {/* Subtítulo */}
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto animate-fade-in drop-shadow">
+          <p className="text-base sm:text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto animate-fade-in drop-shadow">
             Casamentos, festas de 15 anos, eventos corporativos e muito mais. 
             Planejamento completo para o seu evento dos sonhos.
           </p>

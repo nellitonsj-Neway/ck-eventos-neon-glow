@@ -120,7 +120,7 @@ export default function Calculator() {
       <div className="container mx-auto max-w-4xl">
         <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
 
-        <div className="min-h-[500px]" key={currentStep}>
+        <div className="min-h-[400px] sm:min-h-[500px]" key={currentStep}>
           <div className="animate-fade-in">
             {currentStep === 1 && (
               <Step1EventType
