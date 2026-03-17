@@ -119,7 +119,7 @@ export default function Step3Services({
                       onClick={() => handleServiceToggle(service.id)}
                     >
                       {/* Badges */}
-                      <div className="absolute top-2 right-2 flex gap-2">
+                      <div className="absolute top-2 right-2 flex flex-wrap gap-1 sm:gap-2 max-w-[50%] justify-end">
                         {isSelected && estimatedPrice !== null && (
                           <Badge variant="default" className="bg-primary text-primary-foreground font-bold">
                             {formatCurrency(estimatedPrice)}
