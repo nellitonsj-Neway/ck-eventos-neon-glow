@@ -1,5 +1,5 @@
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Lightbulb } from 'lucide-react';
 import { formatDateLong, getDayOfWeek } from '@/utils/formatters';
 import { cn } from '@/lib/utils';
 
@@ -46,8 +46,9 @@ export default function Step4Date({ selectedDate, onDateSelect }: Step4DateProps
           />
         </div>
 
-        <p className="text-center text-sm text-muted-foreground">
-          💡 Selecione apenas datas futuras
+        <p className="text-center text-sm text-muted-foreground flex items-center justify-center gap-1.5">
+          <Lightbulb className="w-4 h-4" />
+          Selecione apenas datas futuras
         </p>
       </div>
     </div>
