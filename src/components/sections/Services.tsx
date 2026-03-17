@@ -31,9 +31,25 @@ const barGalleryImages = [
   { src: images.gallery.bar13, alt: 'Bar - Balcão 2' },
 ];
 
+const experienciasGalleryImages = [
+  { src: images.gallery.exp1, alt: 'Cabine de Fotos - Debutante' },
+  { src: images.gallery.exp2, alt: 'Plataforma 360 - Meninas' },
+  { src: images.gallery.exp3, alt: 'Plataforma 360 - Rapazes com Adereços' },
+  { src: images.gallery.exp4, alt: 'Plataforma 360 - Casal de Noivos' },
+  { src: images.gallery.exp5, alt: 'Plataforma 360 - Setup' },
+  { src: images.gallery.exp6, alt: 'Adereços - Close' },
+  { src: images.gallery.exp7, alt: 'Setup Completo CK Eventos' },
+];
+
 export default function Services() {
   const categories: ServiceCategory[] = ['bar', 'experiencias', 'gourmet'];
   const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string } | null>(null);
+
+  const getCategoryGallery = (category: ServiceCategory) => {
+    if (category === 'bar') return barGalleryImages;
+    if (category === 'experiencias') return experienciasGalleryImages;
+    return null;
+  };
 
   return (
     <section id="servicos" className="py-20 scroll-mt-20">
@@ -50,6 +66,8 @@ export default function Services() {
         {categories.map((category) => {
           const categoryInfo = serviceCategories[category];
           const categoryServices = services.filter(s => s.category === category);
+          const galleryForCategory = getCategoryGallery(category);
+          const hasGallery = !!galleryForCategory;
 
           return (
             <div key={category} className="mb-16 last:mb-0">
@@ -72,19 +90,22 @@ export default function Services() {
               {/* Grid de serviços */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {categoryServices.map((service, index) => {
-                  const isBar = service.id === 'bar';
+                  const isGalleryCard = hasGallery && (
+                    (category === 'bar' && service.id === 'bar') ||
+                    (category === 'experiencias' && index === 0)
+                  );
 
                   return (
                     <div
                       key={service.id}
-                      className={`group relative overflow-hidden rounded-lg border border-border bg-card hover-scale cursor-pointer animate-slide-up ${isBar ? 'md:col-span-2 lg:col-span-3' : ''}`}
+                      className={`group relative overflow-hidden rounded-lg border border-border bg-card hover-scale cursor-pointer animate-slide-up ${isGalleryCard ? 'md:col-span-2 lg:col-span-3' : ''}`}
                       style={{ animationDelay: `${index * 0.1}s` }}
                     >
                       {/* Image / Gallery */}
-                      {isBar ? (
+                      {isGalleryCard && galleryForCategory ? (
                         <div className="p-4 pb-0">
-                          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                            {barGalleryImages.map((img, i) => (
+                          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2">
+                            {galleryForCategory.map((img, i) => (
                               <div
                                 key={i}
                                 className="relative overflow-hidden rounded-md cursor-pointer group/thumb"
@@ -103,7 +124,7 @@ export default function Services() {
                             ))}
                           </div>
                         </div>
-                      ) : (
+                      ) : !isGalleryCard ? (
                         <div className="relative h-48">
                           <LazyImage
                             src={serviceImages[service.id] || images.services.bar}
@@ -113,7 +134,6 @@ export default function Services() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
                           
-                          {/* Badge */}
                           {service.badge && (
                             <div className="absolute top-3 right-3">
                               <Badge variant="default" className="bg-accent text-accent-foreground">
@@ -122,11 +142,11 @@ export default function Services() {
                             </div>
                           )}
                         </div>
-                      )}
+                      ) : null}
 
                       {/* Content */}
                       <div className="p-6 relative">
-                        {isBar && service.badge && (
+                        {isGalleryCard && service.badge && (
                           <Badge variant="default" className="bg-accent text-accent-foreground mb-3">
                             {service.badge}
                           </Badge>
@@ -154,7 +174,6 @@ export default function Services() {
                         </button>
                       </div>
 
-                      {/* Glow effect on hover */}
                       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity glow-primary pointer-events-none" />
                     </div>
                   );
@@ -165,7 +184,6 @@ export default function Services() {
         })}
       </div>
 
-      {/* Lightbox */}
       {lightboxImage && (
         <Lightbox
           isOpen={!!lightboxImage}
