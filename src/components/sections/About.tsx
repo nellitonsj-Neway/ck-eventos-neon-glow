@@ -67,7 +67,7 @@ export default function About() {
               />
               <LazyImage
                 src={images.team.team1}
-                alt="Equipe CK Eventos"
+                alt="Karine e Philipe - Fundadores da CK Eventos"
                 className="rounded-lg"
                 aspectRatio="4/3"
               />
