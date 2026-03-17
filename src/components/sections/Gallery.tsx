@@ -24,7 +24,7 @@ const galleryImages: GalleryImage[] = [
   { src: images.gallery.birthday1, alt: 'Aniversário 1', category: ['birthday'] },
   { src: images.gallery.birthday2, alt: 'Aniversário 2', category: ['birthday'] },
   { src: images.gallery.booth, alt: 'Cabine de Fotos', category: ['sweet15', 'birthday'] },
-  // Bar de Drinks - fotos reais
+  // Bar de Drinks
   { src: images.gallery.bar1, alt: 'Bar de Drinks - Ambiente', category: ['bar', 'wedding', 'birthday'] },
   { src: images.gallery.bar2, alt: 'Bar de Drinks - Letreiro Iluminado', category: ['bar', 'wedding'] },
   { src: images.gallery.bar3, alt: 'Bar de Drinks - Cliente com Drink', category: ['bar', 'wedding'] },
@@ -32,12 +32,19 @@ const galleryImages: GalleryImage[] = [
   { src: images.gallery.bar5, alt: 'Bar de Drinks - Morangos', category: ['bar'] },
   { src: images.gallery.bar6, alt: 'Bar de Drinks - Cliente com Drink 2', category: ['bar', 'birthday'] },
   { src: images.gallery.bar7, alt: 'Bar de Drinks - Banheirinha Azul', category: ['bar', 'birthday'] },
-  
   { src: images.gallery.bar9, alt: 'CK Eventos - Folder', category: ['bar', 'wedding', 'birthday'] },
   { src: images.gallery.bar10, alt: 'Bar de Drinks - Drink na Mão', category: ['bar', 'wedding'] },
   { src: images.gallery.bar11, alt: 'Bar de Drinks - Cliente com Drink 3', category: ['bar'] },
   { src: images.gallery.bar12, alt: 'Bar de Drinks - Balcão', category: ['bar', 'wedding'] },
   { src: images.gallery.bar13, alt: 'Bar de Drinks - Balcão 2', category: ['bar', 'wedding', 'birthday'] },
+  // Experiências Interativas
+  { src: images.gallery.exp1, alt: 'Cabine de Fotos - Debutante', category: ['sweet15'] },
+  { src: images.gallery.exp2, alt: 'Plataforma 360 - Meninas', category: ['sweet15', 'birthday'] },
+  { src: images.gallery.exp3, alt: 'Plataforma 360 - Rapazes com Adereços', category: ['birthday'] },
+  { src: images.gallery.exp4, alt: 'Plataforma 360 - Casal de Noivos', category: ['wedding'] },
+  { src: images.gallery.exp5, alt: 'Plataforma 360 - Setup', category: ['wedding', 'sweet15'] },
+  { src: images.gallery.exp6, alt: 'Adereços para Fotos', category: ['sweet15', 'birthday'] },
+  { src: images.gallery.exp7, alt: 'Setup Completo CK Eventos', category: ['wedding', 'sweet15', 'birthday'] },
 ];
 
 export default function Gallery() {
@@ -60,7 +67,6 @@ export default function Gallery() {
           </p>
         </div>
 
-        {/* Filters */}
         <Tabs value={filter} onValueChange={(v) => setFilter(v as GalleryFilter)} className="mb-12">
           <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-6">
             <TabsTrigger value="all">Todos</TabsTrigger>
@@ -72,7 +78,6 @@ export default function Gallery() {
           </TabsList>
         </Tabs>
 
-        {/* Gallery Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredImages.map((image, index) => (
             <div
@@ -87,8 +92,6 @@ export default function Gallery() {
                 aspectRatio="4/3"
                 className="w-full"
               />
-              
-              {/* Overlay on hover */}
               <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                 <p className="text-white font-medium text-sm">{image.alt}</p>
               </div>
@@ -96,7 +99,6 @@ export default function Gallery() {
           ))}
         </div>
 
-        {/* Lightbox */}
         {lightboxImage && (
           <Lightbox
             isOpen={!!lightboxImage}

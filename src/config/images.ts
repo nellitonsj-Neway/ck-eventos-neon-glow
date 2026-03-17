@@ -1,5 +1,4 @@
-// Imagens ilustrativas do Unsplash para usar como placeholders
-// Substituir depois pelas fotos reais da CK Eventos
+// Imagens da CK Eventos
 
 export const images = {
   logos: {
@@ -11,9 +10,9 @@ export const images = {
   },
   services: {
     bar: '/images/bar/barescuro.jpg',
-    plataforma360: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=2070',
-    cabineFotos: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069',
-    totem: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=2070',
+    plataforma360: '/images/experiencias/plataforma_meninas.jpg',
+    cabineFotos: '/images/experiencias/cabine_debutante.jpg',
+    totem: '/images/experiencias/setup_completo_ck.jpg',
     acai: 'https://images.unsplash.com/photo-1488900128323-21503983a07e?q=80&w=2070',
     milkshake: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?q=80&w=2070',
     fondue: 'https://images.unsplash.com/photo-1530597528568-f268be7e1f3f?q=80&w=2071',
@@ -36,13 +35,20 @@ export const images = {
     bar5: '/images/bar/morangos_bar.jpg',
     bar6: '/images/bar/cliente_drink_na_mao2.jpg',
     bar7: '/images/bar/banheirinha_azul.jpg',
-    
     bar9: '/images/bar/ckeventosfolder.jpg',
     bar10: '/images/bar/drinknamao.jpg',
     bar11: '/images/bar/cliente_drink_na_mao3.jpg',
     bar12: '/images/bar/balcao_bar.jpg',
     bar13: '/images/bar/balcaobar2.jpg',
     booth: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069',
+    // Experiências Interativas
+    exp1: '/images/experiencias/cabine_debutante.jpg',
+    exp2: '/images/experiencias/plataforma_meninas.jpg',
+    exp3: '/images/experiencias/plataforma_rapazes.jpg',
+    exp4: '/images/experiencias/plataforma_noivos.jpg',
+    exp5: '/images/experiencias/plataforma_setup.jpg',
+    exp6: '/images/experiencias/aderecos_closeup.jpg',
+    exp7: '/images/experiencias/setup_completo_ck.jpg',
   },
   team: {
     karine: '/images/team/karine_camisa_preta.jpeg',
@@ -50,6 +56,9 @@ export const images = {
     team1: '/images/team/philipe_ekarine.png',
     team2: '/images/team/foto_quemsomos.png',
     team3: '/images/team/philipe_ekarine.png',
+    equipe_letsparty: '/images/team/equipe_letsparty.jpeg',
+    karine_letsparty: '/images/team/karine_letsparty.jpeg',
+    equipe_15anos: '/images/team/equipe_15anos.jpeg',
   },
   testimonials: {
     client1: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974',
