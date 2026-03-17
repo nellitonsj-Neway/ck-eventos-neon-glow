@@ -61,7 +61,7 @@ export default function About() {
             <div className="space-y-4">
               <LazyImage
                 src={images.team.karine}
-                alt="Karine - Co-fundadora"
+                alt="Karine - Co-fundadora da CK Eventos"
                 className="rounded-lg"
                 aspectRatio="3/4"
               />
