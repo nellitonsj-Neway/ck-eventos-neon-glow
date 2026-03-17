@@ -167,7 +167,7 @@ export default function Terms() {
               Para dúvidas sobre estes Termos de Uso:
             </p>
             <ul className="list-none space-y-2">
-              <li>📧 E-mail: contato@ckeventos.com.br</li>
+              <li>📧 E-mail: ckeventos.s@gmail.com</li>
               <li>📱 WhatsApp: (31) 99343-6059</li>
               <li>📍 Endereço: Belo Horizonte, MG</li>
             </ul>

@@ -16,7 +16,7 @@ export function generateMailto(data: MailtoData): string {
     `Mensagem:\n${data.message}`
   );
 
-  return `mailto:contato@ckeventos.com.br?subject=${subject}&body=${body}`;
+  return `mailto:ckeventos.s@gmail.com?subject=${subject}&body=${body}`;
 }
 
 export function generateWhatsAppMessage(data: MailtoData): string {
