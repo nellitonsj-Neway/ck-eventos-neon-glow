@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { services, serviceCategories, ServiceCategory } from '@/config/services';
 import { images } from '@/config/images';
 import LazyImage from '@/components/ui/lazy-image';
+import Lightbox from '@/components/ui/lightbox';
 import { ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
@@ -14,8 +16,24 @@ const serviceImages: Record<string, string> = {
   'carrinho-fondue': images.services.fondue,
 };
 
+const barGalleryImages = [
+  { src: images.gallery.bar1, alt: 'Bar - Ambiente' },
+  { src: images.gallery.bar2, alt: 'Bar - Letreiro Iluminado' },
+  { src: images.gallery.bar3, alt: 'Bar - Cliente com Drink' },
+  { src: images.gallery.bar4, alt: 'Bar - Coqueteleira e Frutas' },
+  { src: images.gallery.bar5, alt: 'Bar - Morangos' },
+  { src: images.gallery.bar6, alt: 'Bar - Cliente com Drink 2' },
+  { src: images.gallery.bar7, alt: 'Bar - Banheirinha Azul' },
+  { src: images.gallery.bar9, alt: 'CK Eventos - Folder' },
+  { src: images.gallery.bar10, alt: 'Bar - Drink na Mão' },
+  { src: images.gallery.bar11, alt: 'Bar - Cliente com Drink 3' },
+  { src: images.gallery.bar12, alt: 'Bar - Balcão' },
+  { src: images.gallery.bar13, alt: 'Bar - Balcão 2' },
+];
+
 export default function Services() {
   const categories: ServiceCategory[] = ['bar', 'experiencias', 'gourmet'];
+  const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string } | null>(null);
 
   return (
     <section id="servicos" className="py-20 scroll-mt-20">
@@ -53,66 +71,109 @@ export default function Services() {
 
               {/* Grid de serviços */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categoryServices.map((service, index) => (
-                  <div
-                    key={service.id}
-                    className="group relative overflow-hidden rounded-lg border border-border bg-card hover-scale cursor-pointer animate-slide-up"
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                  >
-                    {/* Image Background */}
-                    <div className="relative h-48">
-                      <LazyImage
-                        src={serviceImages[service.id] || images.services.bar}
-                        alt={service.name}
-                        aspectRatio="16/9"
-                        className="w-full h-full"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-                      
-                      {/* Badge */}
-                      {service.badge && (
-                        <div className="absolute top-3 right-3">
-                          <Badge variant="default" className="bg-accent text-accent-foreground">
-                            {service.badge}
-                          </Badge>
+                {categoryServices.map((service, index) => {
+                  const isBar = service.id === 'bar';
+
+                  return (
+                    <div
+                      key={service.id}
+                      className={`group relative overflow-hidden rounded-lg border border-border bg-card hover-scale cursor-pointer animate-slide-up ${isBar ? 'md:col-span-2 lg:col-span-3' : ''}`}
+                      style={{ animationDelay: `${index * 0.1}s` }}
+                    >
+                      {/* Image / Gallery */}
+                      {isBar ? (
+                        <div className="p-4 pb-0">
+                          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                            {barGalleryImages.map((img, i) => (
+                              <div
+                                key={i}
+                                className="relative overflow-hidden rounded-md cursor-pointer group/thumb"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setLightboxImage(img);
+                                }}
+                              >
+                                <LazyImage
+                                  src={img.src}
+                                  alt={img.alt}
+                                  aspectRatio="1/1"
+                                  className="w-full transition-transform duration-300 group-hover/thumb:scale-110"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="relative h-48">
+                          <LazyImage
+                            src={serviceImages[service.id] || images.services.bar}
+                            alt={service.name}
+                            aspectRatio="16/9"
+                            className="w-full h-full"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+                          
+                          {/* Badge */}
+                          {service.badge && (
+                            <div className="absolute top-3 right-3">
+                              <Badge variant="default" className="bg-accent text-accent-foreground">
+                                {service.badge}
+                              </Badge>
+                            </div>
+                          )}
                         </div>
                       )}
-                    </div>
 
-                    {/* Content */}
-                    <div className="p-6 relative">
-                      <service.icon className="w-10 h-10 text-primary mb-3" />
-                      <h3 className="text-xl font-bold mb-2 text-gradient-primary">
-                        {service.name}
-                      </h3>
-                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                        {service.description}
-                      </p>
-                      
-                      {service.isUnderConsultation && (
-                        <p className="text-xs text-amber-500 font-medium mb-4">
-                          💰 Preço sob consulta
+                      {/* Content */}
+                      <div className="p-6 relative">
+                        {isBar && service.badge && (
+                          <Badge variant="default" className="bg-accent text-accent-foreground mb-3">
+                            {service.badge}
+                          </Badge>
+                        )}
+                        <service.icon className="w-10 h-10 text-primary mb-3" />
+                        <h3 className="text-xl font-bold mb-2 text-gradient-primary">
+                          {service.name}
+                        </h3>
+                        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                          {service.description}
                         </p>
-                      )}
-                      
-                      <button 
-                        onClick={() => document.querySelector('#contato')?.scrollIntoView({ behavior: 'smooth' })}
-                        className="inline-flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all"
-                      >
-                        Saiba mais 
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
-                    </div>
+                        
+                        {service.isUnderConsultation && (
+                          <p className="text-xs text-amber-500 font-medium mb-4">
+                            💰 Preço sob consulta
+                          </p>
+                        )}
+                        
+                        <button 
+                          onClick={() => document.querySelector('#contato')?.scrollIntoView({ behavior: 'smooth' })}
+                          className="inline-flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all"
+                        >
+                          Saiba mais 
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      </div>
 
-                    {/* Glow effect on hover */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity glow-primary pointer-events-none" />
-                  </div>
-                ))}
+                      {/* Glow effect on hover */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity glow-primary pointer-events-none" />
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
         })}
       </div>
+
+      {/* Lightbox */}
+      {lightboxImage && (
+        <Lightbox
+          isOpen={!!lightboxImage}
+          onClose={() => setLightboxImage(null)}
+          imageSrc={lightboxImage.src}
+          imageAlt={lightboxImage.alt}
+        />
+      )}
     </section>
   );
 }
