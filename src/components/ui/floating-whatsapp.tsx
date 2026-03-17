@@ -1,4 +1,3 @@
-import { MessageCircle } from 'lucide-react';
 import { Button } from './button';
 
 export default function FloatingWhatsApp() {
@@ -10,13 +9,12 @@ export default function FloatingWhatsApp() {
   };
 
   return (
-    <Button
+    <button
       onClick={handleClick}
-      size="lg"
-      className="fixed bottom-6 right-6 z-50 h-16 w-16 rounded-full p-0 shadow-2xl glow-primary animate-pulse hover:scale-110 transition-transform duration-300"
+      className="fixed bottom-6 right-6 z-50 h-16 w-16 rounded-full p-0 shadow-2xl hover:scale-110 transition-transform duration-300 border-none bg-transparent cursor-pointer"
       aria-label="Fale Conosco no WhatsApp"
     >
-      <MessageCircle className="h-7 w-7" />
-    </Button>
+      <img src="/images/icons/whatsapp.png" alt="WhatsApp" className="h-16 w-16 rounded-full" />
+    </button>
   );
 }
