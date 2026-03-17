@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { MessageCircle, Calculator, Sparkles, LucideIcon } from 'lucide-react';
 import { useParallax } from '@/hooks/useParallax';
+import { sendSimpleWhatsAppMessage } from '@/lib/whatsapp';
 
 interface CTABannerProps {
   variant: 'calculator' | 'services' | 'testimonials';
