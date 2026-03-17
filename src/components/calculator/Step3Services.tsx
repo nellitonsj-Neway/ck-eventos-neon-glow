@@ -207,7 +207,7 @@ export default function Step3Services({
 
                     {/* Opção de horas para experiências */}
                     {isSelected && service.hasHoursOption && (
-                      <div className="ml-12 p-4 rounded-lg bg-muted/50 space-y-3">
+                      <div className="ml-2 sm:ml-12 p-4 rounded-lg bg-muted/50 space-y-3">
                         <Label className="text-sm font-medium">Por quantas horas?</Label>
                         <Select
                           value={selection?.hours?.toString() || '3'}

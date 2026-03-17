@@ -43,7 +43,7 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
                 </div>
                 <span
                   className={cn(
-                    "text-xs font-medium transition-colors",
+                    "text-[10px] sm:text-xs font-medium transition-colors",
                     isCurrent ? "text-primary" : isCompleted ? "text-foreground" : "text-muted-foreground"
                   )}
                 >

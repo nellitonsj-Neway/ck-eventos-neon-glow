@@ -50,7 +50,7 @@ export default function Hero() {
           </h1>
 
           {/* Subtítulo */}
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto animate-fade-in drop-shadow">
+          <p className="text-base sm:text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto animate-fade-in drop-shadow">
             Casamentos, festas de 15 anos, eventos corporativos e muito mais. 
             Planejamento completo para o seu evento dos sonhos.
           </p>

@@ -68,7 +68,7 @@ export default function Gallery() {
         </div>
 
         <Tabs value={filter} onValueChange={(v) => setFilter(v as GalleryFilter)} className="mb-12">
-          <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-6">
+          <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-3 sm:grid-cols-6 gap-1">
             <TabsTrigger value="all">Todos</TabsTrigger>
             <TabsTrigger value="bar">Bar</TabsTrigger>
             <TabsTrigger value="wedding">Casamentos</TabsTrigger>
