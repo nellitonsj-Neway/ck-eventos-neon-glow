@@ -61,13 +61,13 @@ export default function About() {
             <div className="space-y-4">
               <LazyImage
                 src={images.team.karine}
-                alt="Karine - Co-fundadora"
+                alt="Karine - Co-fundadora da CK Eventos"
                 className="rounded-lg"
                 aspectRatio="3/4"
               />
               <LazyImage
                 src={images.team.team1}
-                alt="Equipe CK Eventos"
+                alt="Karine e Philipe - Fundadores da CK Eventos"
                 className="rounded-lg"
                 aspectRatio="4/3"
               />
@@ -75,13 +75,13 @@ export default function About() {
             <div className="space-y-4 mt-8">
               <LazyImage
                 src={images.team.philipe}
-                alt="Philipe - Co-fundador"
+                alt="Philipe - Co-fundador da CK Eventos"
                 className="rounded-lg"
                 aspectRatio="3/4"
               />
               <LazyImage
                 src={images.team.team2}
-                alt="Equipe trabalhando"
+                alt="Equipe CK Eventos"
                 className="rounded-lg"
                 aspectRatio="4/3"
               />

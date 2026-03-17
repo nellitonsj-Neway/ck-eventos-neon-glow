@@ -33,11 +33,11 @@ export const images = {
     booth: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069',
   },
   team: {
-    karine: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976',
-    philipe: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070',
-    team1: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070',
-    team2: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070',
-    team3: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1974',
+    karine: '/images/team/karine_camisa_preta.jpeg',
+    philipe: '/images/team/philipe_camisa_preta.jpeg',
+    team1: '/images/team/philipe_ekarine.png',
+    team2: '/images/team/foto_quemsomos.png',
+    team3: '/images/team/philipe_ekarine.png',
   },
   testimonials: {
     client1: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974',
