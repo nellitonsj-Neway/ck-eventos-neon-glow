@@ -197,23 +197,28 @@ export default function Contact() {
           {/* Contact Info */}
           <div className="space-y-8">
             {/* Map Placeholder */}
-            <div className="aspect-video bg-muted rounded-lg overflow-hidden border border-border">
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=R.+Poti+90+Santa+Luzia+MG"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block aspect-video bg-muted rounded-lg overflow-hidden border border-border"
+            >
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d120615.72236587262!2d-44.051384799999995!3d-19.9166813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa690cacacf2c33%3A0x5b35795e3ad23997!2sBelo%20Horizonte%2C%20MG!5e0!3m2!1spt-BR!2sbr!4v1234567890"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3750.0!2d-43.8513!3d-19.7697!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zR. Poti, 90, Santa Luzia - MG!5e0!3m2!1spt-BR!2sbr"
                 width="100%"
                 height="100%"
-                style={{ border: 0 }}
+                style={{ border: 0, pointerEvents: 'none' }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
-            </div>
+            </a>
 
             {/* Contact Details */}
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <Phone className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                <div>
+                <div className="min-w-0">
                   <p className="font-semibold mb-1">Telefone</p>
                   <a href="tel:+5531993436059" className="text-muted-foreground hover:text-primary">
                     (31) 99343-6059
@@ -223,9 +228,9 @@ export default function Contact() {
 
               <div className="flex items-start gap-4">
                 <Mail className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                <div>
+                <div className="min-w-0">
                   <p className="font-semibold mb-1">Email</p>
-                  <a href="mailto:contato@ckeventos.com.br" className="text-muted-foreground hover:text-primary">
+                  <a href="mailto:contato@ckeventos.com.br" className="text-muted-foreground hover:text-primary break-all">
                     contato@ckeventos.com.br
                   </a>
                 </div>
@@ -233,11 +238,16 @@ export default function Contact() {
 
               <div className="flex items-start gap-4">
                 <MapPin className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                <div>
+                <div className="min-w-0">
                   <p className="font-semibold mb-1">Localização</p>
-                  <p className="text-muted-foreground">
-                    Belo Horizonte, MG
-                  </p>
+                  <a
+                    href="https://www.google.com/maps/search/?api=1&query=R.+Poti+90+Santa+Luzia+MG"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-primary break-words"
+                  >
+                    R. Poti, 90 - Escritório 2 - São Cosme de Cima (São Benedito), Santa Luzia - MG, 33130-450
+                  </a>
                 </div>
               </div>
 
