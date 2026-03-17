@@ -34,16 +34,17 @@ export default function Step1EventType({ selectedEventType, onSelect }: Step1Eve
                   : "border-border bg-card hover:border-primary/50"
               )}
             >
-              {eventType.popular && (
-                <span className="absolute top-2 right-2 px-2 py-1 text-xs font-bold bg-primary text-primary-foreground rounded-full">
-                  POPULAR
-                </span>
-              )}
-              
               <div className="flex items-start gap-3">
                 <Icon className="w-8 h-8 text-primary flex-shrink-0" />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-1">{eventType.name}</h3>
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-lg">{eventType.name}</h3>
+                    {eventType.popular && (
+                      <span className="px-2 py-0.5 text-xs font-bold bg-primary text-primary-foreground rounded-full">
+                        POPULAR
+                      </span>
+                    )}
+                  </div>
                   <p className="text-sm text-muted-foreground">{eventType.description}</p>
                 </div>
                 
