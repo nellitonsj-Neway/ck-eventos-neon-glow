@@ -102,7 +102,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>Belo Horizonte, MG</span>
+                <span className="break-words">R. Poti, 90 - Escritório 2 - São Cosme de Cima, Santa Luzia - MG</span>
               </li>
             </ul>
           </div>

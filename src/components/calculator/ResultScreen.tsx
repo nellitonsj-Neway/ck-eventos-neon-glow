@@ -69,7 +69,7 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
             Investimento Estimado
           </div>
           
-          <div className="text-2xl sm:text-4xl md:text-6xl font-bold text-gradient-primary">
+          <div className="text-xl sm:text-4xl md:text-6xl font-bold text-gradient-primary break-words">
             {formatCurrency(animatedMin)} - {formatCurrency(animatedMax)}
           </div>
           
@@ -153,9 +153,9 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
         <Button
           size="lg"
           onClick={handleWhatsAppClick}
-          className="w-full h-16 text-lg gap-3 glow-primary"
+          className="w-full h-auto py-4 text-sm sm:text-lg gap-2 sm:gap-3 glow-primary whitespace-normal text-center"
         >
-          <MessageCircle className="w-6 h-6" />
+          <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
           Solicitar Orçamento Detalhado no WhatsApp
         </Button>
 
