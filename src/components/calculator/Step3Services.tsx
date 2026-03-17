@@ -174,7 +174,7 @@ export default function Step3Services({
 
                     {/* Opção de tipo de Bar */}
                     {isSelected && service.hasBarTypeOption && (
-                      <div className="ml-12 p-4 rounded-lg bg-muted/50 space-y-4">
+                      <div className="ml-2 sm:ml-12 p-4 rounded-lg bg-muted/50 space-y-4">
                         <Label className="text-sm font-medium">Qual cardápio você prefere?</Label>
                         <RadioGroup
                           value={selection?.barType || 'exclusive'}
