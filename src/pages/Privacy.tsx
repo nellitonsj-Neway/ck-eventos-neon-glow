@@ -94,7 +94,7 @@ export default function Privacy() {
             </ul>
             <p>
               Para exercer esses direitos, entre em contato conosco através do e-mail: 
-              contato@ckeventos.com.br
+              ckeventos.s@gmail.com
             </p>
           </section>
 
