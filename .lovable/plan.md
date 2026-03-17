@@ -1,181 +1,55 @@
 
-# Plano de Atualização Completa - CK Eventos
 
-## Resumo Executivo
-Atualizar o site para refletir os serviços oficiais da CK Eventos, organizados em 3 categorias principais.
+# Modernizar Calculadora de Eventos
 
----
+## Diagnóstico
 
-## Estrutura Final de Serviços
+### Preços
+Os preços em `src/config/pricing.ts` estão atualizados conforme aprovado anteriormente (Bar Essencial 100p=R$2.700, 200p=R$4.800; Exclusive 100p=R$3.300, 200p=R$5.800; Experiências de 1-4h; Gourmet sob consulta). Nenhuma alteração necessária.
 
-```text
-CK EVENTOS
-├── 🍹 BAR DE DRINKS
-│   ├── CK Essencial (cardápio clássico)
-│   └── CK Exclusive (cardápio premium)
-│
-├── 📸 EXPERIÊNCIAS INTERATIVAS
-│   ├── Plataforma 360° (vídeos com iPhone 14 Plus)
-│   ├── Cabine de Fotos (impressão instantânea)
-│   └── Totem Fotográfico (versão compacta)
-│
-└── 🍫 ESTAÇÃO GOURMET (Novidade)
-    ├── Carrinho de Açaí
-    ├── Carrinho de Milk Shake
-    └── Carrinho de Fondue
-```
+### Problemas visuais atuais
+1. **Emojis em todo lugar** — `🎉💰⚠️📋👥📅🎯🍹📸🍫💍👑🎂🎈💐👼🍼🎀🐾🎊💼🎓💕🫖` usados como ícones de categorias, tipos de evento, e na tela de resultado. Aspecto infantil/amador.
+2. **ProgressBar simples** — apenas barra e texto "Passo X de Y".
+3. **Resultado** — layout funcional mas com excesso de emojis.
 
----
+## Plano de Modernização
 
-## Fase 1: Remover Serviços Não Oferecidos
+### 1. Substituir emojis por ícones Lucide nos tipos de evento
+**Arquivo:** `src/config/eventTypes.ts`
+- Trocar o campo `emoji: string` por `icon: LucideIcon` usando ícones apropriados:
+  - Casamento → `Heart`, 15 Anos → `Crown`, Aniversário Adulto → `Cake`, Infantil → `PartyPopper`, Bodas → `Flower2`, Batizado → `Church`, Chá de Bebê → `Baby`, Chá Revelação → `Gift`, Pet → `PawPrint`, Confraternização → `Users`, Corporativo → `Briefcase`, Formatura → `GraduationCap`, Noivado → `HeartHandshake`, Chá de Panela → `CookingPot`, Outros → `Sparkles`
 
-**Arquivos:** `services.ts`, `pricing.ts`
+### 2. Atualizar Step1EventType
+**Arquivo:** `src/components/calculator/Step1EventType.tsx`
+- Renderizar `<Icon>` Lucide ao invés de `<span>{emoji}</span>`
+- Ícone com cor `text-primary`, tamanho `w-8 h-8`
 
-Serviços a remover:
-- Buffet Completo
-- Som e Iluminação
-- Decoração Temática
-- Cerimonial
+### 3. Substituir emojis nas categorias de serviço
+**Arquivo:** `src/config/services.ts`
+- Trocar `serviceCategories[].icon` (string emoji) por Lucide icons:
+  - Bar → `Wine`, Experiências → `Camera`, Gourmet → `ChefHat`
 
----
+### 4. Atualizar Step3Services
+**Arquivo:** `src/components/calculator/Step3Services.tsx`
+- Renderizar ícone Lucide no header da categoria ao invés de emoji
 
-## Fase 2: Atualizar Bar de Drinks
+### 5. Modernizar ProgressBar com ícones de etapa
+**Arquivo:** `src/components/calculator/ProgressBar.tsx`
+- Adicionar 4 ícones circulares (Sparkles, Users, ListChecks, CalendarDays) representando cada etapa
+- Etapas completadas ficam com fundo primary, atual com borda primary, futuras com borda muted
 
-### Preços Atualizados (conforme documentos)
+### 6. Modernizar ResultScreen (remover todos os emojis)
+**Arquivo:** `src/components/calculator/ResultScreen.tsx`
+- Substituir `🎉` → `Sparkles`, `💰` → `DollarSign`, `⚠️` → `AlertTriangle`, `📋` → `ClipboardList`, `👥` → `Users`, `📅` → `CalendarDays`, `🎯` → `Target`
+- Usar ícones Lucide inline com tamanho consistente
 
-| Cardápio | 100 pax | 200 pax |
-|----------|---------|---------|
-| CK Essencial | R$ 2.700 | R$ 4.800 |
-| CK Exclusive | R$ 3.300 | R$ 5.800 |
-
-### Cardápio CK Essencial
-Piña Colada, Caipirinha, Caipifruta, Sex on the Beach, Gin Fruits, Pink Limonade, Gin Energy
-
-### Cardápio CK Exclusive (Best-Seller)
-Todos do Essencial + Gin Tropical, Green Apple Vibe, Moscow Mule, CK Cream, CK Sensation, Cuba Libre, Kids Dream
-
-### Incluso
-- 5h de atendimento
-- Bartenders e copa
-- Taças, copos e utensílios
-- Gelo e insumos
-
----
-
-## Fase 3: Experiências Interativas
-
-### Plataforma 360° (Vídeos)
-| Duração | Preço |
-|---------|-------|
-| 1 hora | R$ 750 |
-| 2 horas | R$ 850 |
-| 3 horas | R$ 1.050 |
-| 4 horas | R$ 1.250 |
-
-**Incluso:** Plataforma LED, iPhone 14 Plus, 1 monitor, vídeos ilimitados, arte personalizada
-
-### Cabine de Fotos (Impressão)
-| Duração | Preço |
-|---------|-------|
-| 1 hora | R$ 800 |
-| 2 horas | R$ 900 |
-| 3 horas | R$ 1.100 |
-| 4 horas | R$ 1.300 |
-
-**Incluso:** 2 monitores, fotos ilimitadas, impressão instantânea, adereços
-
-### Totem Fotográfico (Compacto) - Novo
-| Duração | Preço |
-|---------|-------|
-| 1 hora | R$ 700 |
-| 2 horas | R$ 800 |
-| 3 horas | R$ 1.000 |
-| 4 horas | R$ 1.200 |
-
-**Incluso:** 1 monitor, fotos ilimitadas, impressão instantânea
-
----
-
-## Fase 4: Estação Gourmet (Nova Categoria)
-
-### Carrinho de Açaí
-- **Descrição:** Refrescante e personalizável com diversos toppings
-- **Ideal para:** Casamentos diurnos e formaturas
-- **Preço:** Sob consulta (baseado em convidados)
-
-### Carrinho de Milk Shake
-- **Descrição:** Visual retrô, atrai público jovem, cria fotos divertidas
-- **Ideal para:** Eventos jovens e descontraídos
-- **Preço:** Sob consulta
-
-### Carrinho de Fondue
-- **Descrição:** Elegância para eventos noturnos ou de inverno, frutas frescas com chocolate nobre
-- **Ideal para:** Casamentos e eventos sofisticados
-- **Preço:** Sob consulta (baseado em convidados)
-
----
-
-## Fase 5: Adicionais Opcionais
-
-| Adicional | Preço |
-|-----------|-------|
-| Hora do Shot | R$ 250 |
-| Bartender Extra | R$ 250 |
-| Balcão de Madeira Rústico | R$ 120 |
-| Guestbook | R$ 200 |
-
----
-
-## Fase 6: Correções Gerais
-
-### Anos de Experiência
-- Alterar "10 Anos" para "5 Anos"
-- Atualizar "Fundada em 2015" para "Fundada em 2020"
-
-### Textos e Diferenciais
-- Slogan: "Aqui você não contrata apenas drinks, contrata tranquilidade"
-- Destaque: iPhone 14 Plus na Plataforma 360°
-- Badge "Best-Seller" no Bar Exclusive
-
----
-
-## Arquivos a Modificar
-
-| Arquivo | Alterações |
-|---------|------------|
-| `src/config/services.ts` | Remover 4 serviços, adicionar Totem e Milk Shake, reorganizar em categorias |
-| `src/config/pricing.ts` | Novos preços bar (Essencial/Exclusive), preços experiências, gourmet sob consulta |
-| `src/components/sections/Services.tsx` | Novo layout com 3 categorias visuais |
-| `src/components/calculator/Step3Services.tsx` | Seleção tipo bar, duração experiências, gourmet sem cálculo automático |
-| `src/components/sections/Stats.tsx` | 10 anos → 5 anos |
-| `src/components/sections/About.tsx` | Ano fundação, diferenciais |
-| `src/config/images.ts` | Adicionar/atualizar imagens dos novos serviços |
-
----
-
-## Lógica da Calculadora
-
-### Bar de Drinks
-1. Usuário seleciona "Bar de Drinks"
-2. Pergunta: "Qual cardápio?" → Essencial ou Exclusive
-3. Cálculo baseado em convidados + tipo selecionado
-
-### Experiências
-1. Usuário seleciona Plataforma 360° / Cabine / Totem
-2. Pergunta: "Por quantas horas?" → 1-4h
-3. Cálculo baseado na tabela de preços
-
-### Estação Gourmet
-1. Usuário seleciona carrinho desejado
-2. Exibe mensagem: "Preço sob consulta - será calculado conforme número de convidados"
-3. Não soma ao total, mas aparece no resumo como "A consultar"
-
----
-
-## Considerações Técnicas
-
-1. **Interface de Services:** Reorganizar com headers de categoria (Bar, Experiências, Gourmet)
-2. **Calculadora:** Serviços "sob consulta" aparecem no resumo mas não no total
-3. **Mobile:** Cards de categoria devem funcionar bem em telas pequenas
-4. **SEO:** Atualizar meta descriptions com serviços reais
+### Arquivos modificados
+- `src/config/eventTypes.ts` — campo icon com Lucide
+- `src/config/services.ts` — categoryIcon com Lucide
+- `src/components/calculator/Step1EventType.tsx`
+- `src/components/calculator/Step3Services.tsx`
+- `src/components/calculator/ProgressBar.tsx`
+- `src/components/calculator/ResultScreen.tsx`
+- `src/components/calculator/Step2Guests.tsx` — remover emoji `💡`
+- `src/components/calculator/Step4Date.tsx` — remover emoji `💡`
 
