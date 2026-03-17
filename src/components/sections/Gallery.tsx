@@ -32,7 +32,7 @@ const galleryImages: GalleryImage[] = [
   { src: images.gallery.bar5, alt: 'Bar de Drinks - Morangos', category: ['bar'] },
   { src: images.gallery.bar6, alt: 'Bar de Drinks - Cliente com Drink 2', category: ['bar', 'birthday'] },
   { src: images.gallery.bar7, alt: 'Bar de Drinks - Banheirinha Azul', category: ['bar', 'birthday'] },
-  { src: images.gallery.bar8, alt: 'Bar de Drinks - Banheirinha Azul 2', category: ['bar'] },
+  
   { src: images.gallery.bar9, alt: 'CK Eventos - Folder', category: ['bar', 'wedding', 'birthday'] },
   { src: images.gallery.bar10, alt: 'Bar de Drinks - Drink na Mão', category: ['bar', 'wedding'] },
   { src: images.gallery.bar11, alt: 'Bar de Drinks - Cliente com Drink 3', category: ['bar'] },
