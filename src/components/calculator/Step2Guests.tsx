@@ -51,8 +51,9 @@ export default function Step2Guests({ guests, onGuestsChange }: Step2GuestsProps
           </div>
         </div>
 
-        <p className="text-center text-sm text-muted-foreground">
-          💡 Faixas de preço variam de acordo com o número de convidados
+        <p className="text-center text-sm text-muted-foreground flex items-center justify-center gap-1.5">
+          <Lightbulb className="w-4 h-4" />
+          Faixas de preço variam de acordo com o número de convidados
         </p>
       </div>
     </div>
