@@ -81,7 +81,7 @@ export default function About() {
               />
               <LazyImage
                 src={images.team.team2}
-                alt="Equipe trabalhando"
+                alt="Equipe CK Eventos"
                 className="rounded-lg"
                 aspectRatio="4/3"
               />
