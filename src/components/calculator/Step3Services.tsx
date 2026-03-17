@@ -1,5 +1,5 @@
 import { services, getRecommendedServices, getServicesByCategory, serviceCategories, ServiceCategory } from '@/config/services';
-import { barMenus, BarType } from '@/config/pricing';
+import { barMenus, BarType, getPriceForService } from '@/config/pricing';
 import { ServiceSelection } from '@/utils/calculator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -13,17 +13,29 @@ import {
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import { formatCurrency } from '@/utils/formatters';
 
 interface Step3ServicesProps {
   selectedServices: ServiceSelection[];
   eventTypeId: string;
+  guests: number;
   onServicesChange: (services: ServiceSelection[]) => void;
   onServiceOptionChange: (serviceId: string, options: { barType?: BarType; hours?: number }) => void;
+}
+
+function getEstimatedPrice(serviceId: string, guests: number, selection?: ServiceSelection): number | null {
+  return getPriceForService(serviceId, {
+    guests,
+    year: new Date().getFullYear(),
+    barType: selection?.barType,
+    experienceHours: selection?.hours,
+  });
 }
 
 export default function Step3Services({
   selectedServices,
   eventTypeId,
+  guests,
   onServicesChange,
   onServiceOptionChange,
 }: Step3ServicesProps) {
@@ -40,20 +52,27 @@ export default function Step3Services({
     if (isServiceSelected(serviceId)) {
       onServicesChange(selectedServices.filter((s) => s.serviceId !== serviceId));
     } else {
-      // Adicionar com valores padrão
       const service = services.find(s => s.id === serviceId);
       const newSelection: ServiceSelection = { serviceId };
       
       if (service?.hasBarTypeOption) {
-        newSelection.barType = 'exclusive'; // Default: Best-Seller
+        newSelection.barType = 'exclusive';
       }
       if (service?.hasHoursOption) {
-        newSelection.hours = 3; // Default: 3 horas
+        newSelection.hours = 3;
       }
       
       onServicesChange([...selectedServices, newSelection]);
     }
   };
+
+  // Calcular subtotal
+  const subtotal = selectedServices.reduce((acc, sel) => {
+    const price = getEstimatedPrice(sel.serviceId, guests, sel);
+    return acc + (price ?? 0);
+  }, 0);
+
+  const hasConsultation = selectedServices.some(sel => getEstimatedPrice(sel.serviceId, guests, sel) === null);
 
   return (
     <div className="space-y-8">
@@ -72,7 +91,6 @@ export default function Step3Services({
         
         return (
           <div key={category} className="space-y-4">
-            {/* Header da categoria */}
             <div className="flex items-center gap-3 pb-2 border-b border-border">
               <categoryInfo.icon className="w-6 h-6 text-primary" />
               <div>
@@ -81,13 +99,13 @@ export default function Step3Services({
               </div>
             </div>
 
-            {/* Serviços da categoria */}
             <div className="space-y-4 pl-2">
               {categoryServices.map((service) => {
                 const isSelected = isServiceSelected(service.id);
                 const selection = getServiceSelection(service.id);
                 const isRecommended = recommendedServiceIds.includes(service.id);
                 const Icon = service.icon;
+                const estimatedPrice = isSelected ? getEstimatedPrice(service.id, guests, selection) : null;
 
                 return (
                   <div key={service.id} className="space-y-3">
@@ -102,7 +120,17 @@ export default function Step3Services({
                     >
                       {/* Badges */}
                       <div className="absolute top-2 right-2 flex gap-2">
-                        {service.badge && (
+                        {isSelected && estimatedPrice !== null && (
+                          <Badge variant="default" className="bg-primary text-primary-foreground font-bold">
+                            {formatCurrency(estimatedPrice)}
+                          </Badge>
+                        )}
+                        {isSelected && estimatedPrice === null && (
+                          <Badge variant="outline" className="border-amber-500 text-amber-500">
+                            Sob consulta
+                          </Badge>
+                        )}
+                        {service.badge && !isSelected && (
                           <Badge variant="default" className="bg-accent text-accent-foreground">
                             {service.badge}
                           </Badge>
@@ -206,8 +234,17 @@ export default function Step3Services({
         );
       })}
 
-      <div className="text-center text-sm text-muted-foreground">
-        {selectedServices.length} {selectedServices.length === 1 ? 'serviço selecionado' : 'serviços selecionados'}
+      {/* Rodapé com subtotal */}
+      <div className="rounded-lg border border-border bg-card p-4 text-center space-y-1">
+        <p className="text-sm text-muted-foreground">
+          {selectedServices.length} {selectedServices.length === 1 ? 'serviço selecionado' : 'serviços selecionados'}
+        </p>
+        {selectedServices.length > 0 && (
+          <p className="text-lg font-bold text-primary">
+            Estimativa: {formatCurrency(subtotal)}
+            {hasConsultation && <span className="text-sm font-normal text-muted-foreground ml-2">+ itens sob consulta</span>}
+          </p>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import ProgressBar from '@/components/calculator/ProgressBar';
 import Step1EventType from '@/components/calculator/Step1EventType';
 import Step2Guests from '@/components/calculator/Step2Guests';
@@ -9,6 +10,10 @@ import ResultScreen from '@/components/calculator/ResultScreen';
 import { CalculatorData, ServiceSelection, calculateBudget, Budget } from '@/utils/calculator';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { BarType } from '@/config/pricing';
+
+const scrollToCalculator = () => {
+  document.getElementById('calculadora')?.scrollIntoView({ behavior: 'smooth' });
+};
 
 export default function Calculator() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -38,6 +43,21 @@ export default function Calculator() {
     }
   };
 
+  const getDisabledReason = () => {
+    switch (currentStep) {
+      case 1:
+        return 'Selecione o tipo de evento';
+      case 2:
+        return 'Defina o número de convidados';
+      case 3:
+        return 'Selecione pelo menos 1 serviço';
+      case 4:
+        return 'Selecione a data do evento';
+      default:
+        return '';
+    }
+  };
+
   const handleNext = () => {
     if (currentStep === totalSteps && canProceed()) {
       const budget = calculateBudget(calculatorData as CalculatorData);
@@ -45,14 +65,14 @@ export default function Calculator() {
       setShowResult(true);
     } else if (canProceed()) {
       setCurrentStep(currentStep + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToCalculator();
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToCalculator();
     }
   };
 
@@ -65,7 +85,7 @@ export default function Calculator() {
       guests: 100,
       services: [],
     });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToCalculator();
   };
 
   const handleServicesChange = (services: ServiceSelection[]) => {
@@ -93,47 +113,52 @@ export default function Calculator() {
     );
   }
 
+  const proceed = canProceed();
+
   return (
     <section id="calculadora" className="py-20 px-4 bg-card/30">
       <div className="container mx-auto max-w-4xl">
         <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
 
-        <div className="min-h-[500px]">
-          {currentStep === 1 && (
-            <Step1EventType
-              selectedEventType={calculatorData.eventType || ''}
-              onSelect={(eventType) =>
-                setCalculatorData({ ...calculatorData, eventType })
-              }
-            />
-          )}
+        <div className="min-h-[500px]" key={currentStep}>
+          <div className="animate-fade-in">
+            {currentStep === 1 && (
+              <Step1EventType
+                selectedEventType={calculatorData.eventType || ''}
+                onSelect={(eventType) =>
+                  setCalculatorData({ ...calculatorData, eventType })
+                }
+              />
+            )}
 
-          {currentStep === 2 && (
-            <Step2Guests
-              guests={calculatorData.guests || 100}
-              onGuestsChange={(guests) =>
-                setCalculatorData({ ...calculatorData, guests })
-              }
-            />
-          )}
+            {currentStep === 2 && (
+              <Step2Guests
+                guests={calculatorData.guests || 100}
+                onGuestsChange={(guests) =>
+                  setCalculatorData({ ...calculatorData, guests })
+                }
+              />
+            )}
 
-          {currentStep === 3 && (
-            <Step3Services
-              selectedServices={calculatorData.services || []}
-              eventTypeId={calculatorData.eventType || ''}
-              onServicesChange={handleServicesChange}
-              onServiceOptionChange={handleServiceOptionChange}
-            />
-          )}
+            {currentStep === 3 && (
+              <Step3Services
+                selectedServices={calculatorData.services || []}
+                eventTypeId={calculatorData.eventType || ''}
+                guests={calculatorData.guests || 100}
+                onServicesChange={handleServicesChange}
+                onServiceOptionChange={handleServiceOptionChange}
+              />
+            )}
 
-          {currentStep === 4 && (
-            <Step4Date
-              selectedDate={calculatorData.date}
-              onDateSelect={(date) =>
-                setCalculatorData({ ...calculatorData, date })
-              }
-            />
-          )}
+            {currentStep === 4 && (
+              <Step4Date
+                selectedDate={calculatorData.date}
+                onDateSelect={(date) =>
+                  setCalculatorData({ ...calculatorData, date })
+                }
+              />
+            )}
+          </div>
         </div>
 
         {/* Botões de navegação */}
@@ -149,15 +174,28 @@ export default function Calculator() {
             Voltar
           </Button>
 
-          <Button
-            size="lg"
-            onClick={handleNext}
-            disabled={!canProceed()}
-            className="gap-2 glow-primary"
-          >
-            {currentStep === totalSteps ? 'Ver Orçamento' : 'Continuar'}
-            <ChevronRight className="w-5 h-5" />
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="inline-flex">
+                  <Button
+                    size="lg"
+                    onClick={handleNext}
+                    disabled={!proceed}
+                    className="gap-2 glow-primary"
+                  >
+                    {currentStep === totalSteps ? 'Ver Orçamento' : 'Continuar'}
+                    <ChevronRight className="w-5 h-5" />
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              {!proceed && (
+                <TooltipContent>
+                  <p>{getDisabledReason()}</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
     </section>

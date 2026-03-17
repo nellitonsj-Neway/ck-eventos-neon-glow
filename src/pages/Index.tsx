@@ -1,6 +1,5 @@
 import Header from '@/components/sections/Header';
 import Hero from '@/components/sections/Hero';
-import Stats from '@/components/sections/Stats';
 import Calculator from '@/components/sections/Calculator';
 import Services from '@/components/sections/Services';
 import Gallery from '@/components/sections/Gallery';
@@ -23,7 +22,6 @@ const Index = () => {
       
       <main>
         <Hero />
-        <Stats />
         <div id="calculadora" className="scroll-mt-20">
           <Calculator />
         </div>
