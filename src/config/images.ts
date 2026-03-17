@@ -36,7 +36,7 @@ export const images = {
     bar5: '/images/bar/morangos_bar.jpg',
     bar6: '/images/bar/cliente_drink_na_mao2.jpg',
     bar7: '/images/bar/banheirinha_azul.jpg',
-    bar8: '/images/bar/banheirinha_azul2.jpg',
+    
     bar9: '/images/bar/ckeventosfolder.jpg',
     bar10: '/images/bar/drinknamao.jpg',
     bar11: '/images/bar/cliente_drink_na_mao3.jpg',
