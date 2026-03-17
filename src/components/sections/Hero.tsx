@@ -39,7 +39,7 @@ export default function Hero() {
           </div>
 
           {/* Título principal */}
-          <h1 className="text-5xl md:text-7xl font-bold animate-fade-in drop-shadow-lg">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold animate-fade-in drop-shadow-lg">
             <span className="text-gradient-primary">
               Transformamos Momentos
             </span>
