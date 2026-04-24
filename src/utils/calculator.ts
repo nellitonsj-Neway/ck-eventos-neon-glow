@@ -1,4 +1,5 @@
 import { getPriceForService, BarType } from '@/config/pricing';
+import { services } from '@/config/services';
 
 export interface ServiceSelection {
   serviceId: string;
@@ -54,9 +55,11 @@ export function calculateBudget(data: CalculatorData): Budget {
       total += price;
     }
 
+    const service = services.find(s => s.id === selection.serviceId);
+    
     items.push({
       serviceId: selection.serviceId,
-      serviceName: selection.serviceId,
+      serviceName: service?.name || selection.serviceId,
       price,
       details: selection.barType
         ? `Cardápio ${selection.barType === 'essencial' ? 'CK Essencial' : 'CK Exclusive'}`

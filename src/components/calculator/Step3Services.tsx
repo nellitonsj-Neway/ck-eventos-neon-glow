@@ -13,7 +13,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '@/utils/formatters';
-import { Check } from 'lucide-react';
+import { Check, Plus } from 'lucide-react';
 
 interface Step3ServicesProps {
   selectedServices: ServiceSelection[];
@@ -66,13 +66,24 @@ export default function Step3Services({
     }
   };
 
-  // Calcular subtotal
+  // Calcular subtotal com proteção
   const subtotal = selectedServices.reduce((acc, sel) => {
-    const price = getEstimatedPrice(sel.serviceId, guests, sel);
-    return acc + (price ?? 0);
+    try {
+      const price = getEstimatedPrice(sel.serviceId, guests, sel);
+      return acc + (price ?? 0);
+    } catch (e) {
+      console.error("Erro ao calcular preço:", e);
+      return acc;
+    }
   }, 0);
 
-  const hasConsultation = selectedServices.some(sel => getEstimatedPrice(sel.serviceId, guests, sel) === null);
+  const hasConsultation = selectedServices.some(sel => {
+    try {
+      return getEstimatedPrice(sel.serviceId, guests, sel) === null;
+    } catch {
+      return true;
+    }
+  });
 
   return (
     <div className="space-y-12 py-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -90,6 +101,10 @@ export default function Step3Services({
           const categoryServices = getServicesByCategory(category);
           const categoryInfo = serviceCategories[category];
 
+          if (!categoryInfo) return null; // Proteção contra categoria inexistente
+
+          const CategoryIcon = categoryInfo.icon;
+
           return (
             <div 
               key={category} 
@@ -98,11 +113,11 @@ export default function Step3Services({
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                  <categoryInfo.icon className="w-6 h-6 text-primary" />
+                  <CategoryIcon className="w-6 h-6 text-primary" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold tracking-tight uppercase text-primary/90">{categoryInfo.name}</h3>
-                  <p className="text-muted-foreground">{categoryInfo.description}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">{categoryInfo.description}</p>
                 </div>
                 <div className="flex-1 h-px bg-gradient-to-r from-primary/30 to-transparent"></div>
               </div>
@@ -112,7 +127,7 @@ export default function Step3Services({
                   const isSelected = isServiceSelected(service.id);
                   const selection = getServiceSelection(service.id);
                   const isRecommended = recommendedServiceIds.includes(service.id);
-                  const Icon = service.icon;
+                  const ServiceIcon = service.icon || Check; // Fallback para ícone
                   const estimatedPrice = isSelected ? getEstimatedPrice(service.id, guests, selection) : null;
 
                   return (
@@ -125,7 +140,7 @@ export default function Step3Services({
                           : "hover:border-primary/30 hover:bg-white/[0.02]"
                       )}
                     >
-                      <div className="p-6 md:p-8 flex flex-col md:flex-row gap-6">
+                      <div className="p-6 md:p-8 flex flex-col md:row gap-6">
                         <div className="flex-1 space-y-4">
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex items-center gap-3">
@@ -133,7 +148,7 @@ export default function Step3Services({
                                 "w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-500",
                                 isSelected ? "bg-primary text-primary-foreground" : "bg-white/5 text-primary group-hover:bg-primary/20"
                               )}>
-                                <Icon className="w-5 h-5" />
+                                <ServiceIcon className="w-5 h-5" />
                               </div>
                               <div>
                                 <h4 className="text-xl font-bold">{service.name}</h4>
@@ -167,7 +182,7 @@ export default function Step3Services({
                             </button>
                           </div>
 
-                          <p className="text-muted-foreground leading-relaxed">
+                          <p className="text-sm text-muted-foreground leading-relaxed">
                             {service.description}
                           </p>
 
@@ -177,7 +192,7 @@ export default function Step3Services({
                                 {estimatedPrice !== null ? formatCurrency(estimatedPrice) : "Sob consulta"}
                               </div>
                               {service.isUnderConsultation && (
-                                <span className="text-xs text-amber-500 font-medium px-2 py-1 bg-amber-500/10 rounded-md border border-amber-500/20">
+                                <span className="text-[10px] text-amber-500 font-medium px-2 py-1 bg-amber-500/10 rounded-md border border-amber-500/20">
                                   Ajustado para {guests} convidados
                                 </span>
                               )}
@@ -190,7 +205,7 @@ export default function Step3Services({
                           <div className="md:w-80 space-y-6 pt-6 md:pt-0 md:pl-8 md:border-l border-white/5 animate-in fade-in zoom-in-95 duration-500">
                             {service.hasBarTypeOption && (
                               <div className="space-y-3">
-                                <Label className="text-xs font-bold uppercase tracking-tighter text-primary">Cardápio de Drinks</Label>
+                                <Label className="text-[10px] font-bold uppercase tracking-widest text-primary">Cardápio de Drinks</Label>
                                 <RadioGroup
                                   value={selection?.barType || 'exclusive'}
                                   onValueChange={(value) => onServiceOptionChange(service.id, { barType: value as BarType })}
@@ -210,10 +225,10 @@ export default function Step3Services({
                                       <RadioGroupItem value={menu.type} id={`bar-${menu.type}-${service.id}`} className="sr-only" />
                                       <div className="flex-1">
                                         <div className="flex items-center justify-between">
-                                          <span className="text-sm font-bold">{menu.name}</span>
+                                          <span className="text-xs font-bold">{menu.name}</span>
                                           {menu.badge && <span className="text-[10px] bg-primary/20 text-primary px-1.5 rounded">{menu.badge}</span>}
                                         </div>
-                                        <p className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">{menu.drinks.join(', ')}</p>
+                                        <p className="text-[9px] text-muted-foreground line-clamp-1 mt-0.5">{menu.drinks.join(', ')}</p>
                                       </div>
                                     </div>
                                   ))}
@@ -223,7 +238,7 @@ export default function Step3Services({
 
                             {service.hasHoursOption && (
                               <div className="space-y-3">
-                                <Label className="text-xs font-bold uppercase tracking-tighter text-primary">Duração da Experiência</Label>
+                                <Label className="text-[10px] font-bold uppercase tracking-widest text-primary">Duração da Experiência</Label>
                                 <Select
                                   value={selection?.hours?.toString() || '3'}
                                   onValueChange={(value) => onServiceOptionChange(service.id, { hours: Number(value) })}
@@ -257,7 +272,7 @@ export default function Step3Services({
       <div className="sticky bottom-4 z-20 max-w-2xl mx-auto px-4">
         <div className="glass-card p-6 border-primary/30 shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-center md:text-left">
-            <div className="text-sm text-muted-foreground uppercase tracking-widest font-bold">Resumo Parcial</div>
+            <div className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Resumo Parcial</div>
             <div className="text-xs text-primary/80">{selectedServices.length} {selectedServices.length === 1 ? 'item selecionado' : 'itens selecionados'}</div>
           </div>
           
