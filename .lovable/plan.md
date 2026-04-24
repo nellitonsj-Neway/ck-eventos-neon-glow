@@ -1,181 +1,153 @@
 
-# Plano de Atualização Completa - CK Eventos
+# Recriar a calculadora de forma simplificada, sem perder funções
 
-## Resumo Executivo
-Atualizar o site para refletir os serviços oficiais da CK Eventos, organizados em 3 categorias principais.
+## Direção recomendada
 
----
+Em vez de continuar corrigindo bugs pontuais da calculadora atual, a melhor solução é **reconstruir a camada de interface da calculadora** e **reaproveitar toda a lógica útil que já existe**:
 
-## Estrutura Final de Serviços
+- manter `eventTypes`, `services`, `pricing` e integração com WhatsApp
+- substituir o fluxo atual por uma versão **mais simples, estável e previsível**
+- revisar todas as combinações principais para evitar novos defeitos no site publicado
+
+Isso reduz o risco de continuar com uma base frágil e resolve o problema de “alguns eventos não avançam” e “alguns não calculam”.
+
+## O que será preservado
+
+- todos os tipos de evento
+- seleção de convidados
+- todos os serviços atuais
+- opção de cardápio do bar
+- opção de horas nas experiências
+- itens “sob consulta”
+- faixa estimada de orçamento
+- envio do resumo pelo WhatsApp
+
+## O que será reconstruído
+
+### 1. Simplificar o fluxo da calculadora
+Substituir o wizard atual por uma calculadora mais direta, em 1 fluxo visual:
 
 ```text
-CK EVENTOS
-├── 🍹 BAR DE DRINKS
-│   ├── CK Essencial (cardápio clássico)
-│   └── CK Exclusive (cardápio premium)
-│
-├── 📸 EXPERIÊNCIAS INTERATIVAS
-│   ├── Plataforma 360° (vídeos com iPhone 14 Plus)
-│   ├── Cabine de Fotos (impressão instantânea)
-│   └── Totem Fotográfico (versão compacta)
-│
-└── 🍫 ESTAÇÃO GOURMET (Novidade)
-    ├── Carrinho de Açaí
-    ├── Carrinho de Milk Shake
-    └── Carrinho de Fondue
+Evento + convidados
+→ Serviços + opções
+→ Data
+→ Resultado + WhatsApp
 ```
 
----
+Sem depender de um botão “Continuar” frágil entre várias etapas.
 
-## Fase 1: Remover Serviços Não Oferecidos
+### 2. Corrigir os bugs estruturais do fluxo atual
+Os principais pontos a eliminar na implementação:
 
-**Arquivos:** `services.ts`, `pricing.ts`
+- remover a dependência do botão com tooltip/wrapper para navegação
+- remover seleção ambígua nos cards de serviços
+- impedir estados inválidos ou parciais no cálculo
+- tratar corretamente cenários com serviços “sob consulta”
+- garantir que o resultado nunca mostre `R$ 0,00` como se fosse cálculo válido quando na prática for apenas consulta comercial
 
-Serviços a remover:
-- Buffet Completo
-- Som e Iluminação
-- Decoração Temática
-- Cerimonial
+### 3. Melhorar a validação
+Trocar validações escondidas por validações visíveis e previsíveis:
 
----
+- tipo de evento obrigatório
+- pelo menos 1 serviço obrigatório
+- data válida obrigatória
+- convidados com faixa controlada
+- feedback inline quando faltar alguma informação
 
-## Fase 2: Atualizar Bar de Drinks
+### 4. Tornar o cálculo robusto
+Ajustar a lógica para suportar 3 estados claros:
 
-### Preços Atualizados (conforme documentos)
+- **estimativa completa**: todos os itens têm preço
+- **estimativa mista**: parte calculada + parte sob consulta
+- **somente sob consulta**: sem valor numérico enganoso
 
-| Cardápio | 100 pax | 200 pax |
-|----------|---------|---------|
-| CK Essencial | R$ 2.700 | R$ 4.800 |
-| CK Exclusive | R$ 3.300 | R$ 5.800 |
+## Arquivos a alterar
 
-### Cardápio CK Essencial
-Piña Colada, Caipirinha, Caipifruta, Sex on the Beach, Gin Fruits, Pink Limonade, Gin Energy
+| Arquivo | Mudança |
+|---|---|
+| `src/components/sections/Calculator.tsx` | Recriar a calculadora como fluxo simplificado e estável |
+| `src/components/calculator/Step1EventType.tsx` | Reaproveitar/adaptar UI do evento |
+| `src/components/calculator/Step2Guests.tsx` | Reaproveitar/adaptar controle de convidados |
+| `src/components/calculator/Step3Services.tsx` | Refatorar seleção de serviços para evitar cliques ambíguos |
+| `src/components/calculator/Step4Date.tsx` | Ajustar seleção/validação de data |
+| `src/components/calculator/ResultScreen.tsx` | Refazer saída para suportar estimativa completa, mista e sob consulta |
+| `src/utils/calculator.ts` | Fortalecer cálculo e retorno de status |
+| `src/lib/whatsapp.ts` | Garantir mensagem coerente para todos os cenários |
 
-### Cardápio CK Exclusive (Best-Seller)
-Todos do Essencial + Gin Tropical, Green Apple Vibe, Moscow Mule, CK Cream, CK Sensation, Cuba Libre, Kids Dream
+## Bugs já visíveis no código que serão tratados
 
-### Incluso
-- 5h de atendimento
-- Bartenders e copa
-- Taças, copos e utensílios
-- Gelo e insumos
+### Fluxo atual
+- o botão de avanço está acoplado a tooltip/wrapper desnecessário
+- isso pode causar comportamento inconsistente em produção
 
----
+### Seleção de serviços
+- o card inteiro é clicável e contém checkbox interno
+- isso aumenta risco de toggle duplicado, seleção inconsistente e estado difícil de prever
 
-## Fase 3: Experiências Interativas
+### Resultado
+- serviços “sob consulta” entram como `null`, mas o total vira `0`
+- isso pode gerar resultado enganoso para o usuário
 
-### Plataforma 360° (Vídeos)
-| Duração | Preço |
-|---------|-------|
-| 1 hora | R$ 750 |
-| 2 horas | R$ 850 |
-| 3 horas | R$ 1.050 |
-| 4 horas | R$ 1.250 |
+### Data
+- a regra de bloqueio usa comparação direta com `new Date()`
+- isso pode causar inconsistência em horários/timezone e bloquear datas válidas no mesmo dia
 
-**Incluso:** Plataforma LED, iPhone 14 Plus, 1 monitor, vídeos ilimitados, arte personalizada
+## Entrega esperada
 
-### Cabine de Fotos (Impressão)
-| Duração | Preço |
-|---------|-------|
-| 1 hora | R$ 800 |
-| 2 horas | R$ 900 |
-| 3 horas | R$ 1.100 |
-| 4 horas | R$ 1.300 |
+### Interface nova
+- layout mais simples
+- menos etapas frágeis
+- validações claras
+- resultado confiável
+- melhor comportamento em desktop e celular
 
-**Incluso:** 2 monitores, fotos ilimitadas, impressão instantânea, adereços
+### Funcionalidade nova da saída
+- mostrar:
+  - faixa calculada quando houver preço
+  - aviso claro quando houver itens sob consulta
+  - “sob consulta” quando não houver base numérica suficiente
 
-### Totem Fotográfico (Compacto) - Novo
-| Duração | Preço |
-|---------|-------|
-| 1 hora | R$ 700 |
-| 2 horas | R$ 800 |
-| 3 horas | R$ 1.000 |
-| 4 horas | R$ 1.200 |
+## Revisão completa de funcionalidades
 
-**Incluso:** 1 monitor, fotos ilimitadas, impressão instantânea
+Será feita uma checagem funcional dos cenários principais:
 
----
+### Eventos
+- todos os tipos de evento devem abrir e calcular normalmente
 
-## Fase 4: Estação Gourmet (Nova Categoria)
+### Serviços
+- bar com cardápio essencial/exclusive
+- experiências com 1h, 2h, 3h, 4h
+- gourmet como sob consulta
+- combinações mistas entre categorias
 
-### Carrinho de Açaí
-- **Descrição:** Refrescante e personalizável com diversos toppings
-- **Ideal para:** Casamentos diurnos e formaturas
-- **Preço:** Sob consulta (baseado em convidados)
+### Resultado
+- cálculo com 1 serviço
+- cálculo com múltiplos serviços
+- cálculo com apenas itens sob consulta
+- cálculo misto
+- resumo correto no WhatsApp
 
-### Carrinho de Milk Shake
-- **Descrição:** Visual retrô, atrai público jovem, cria fotos divertidas
-- **Ideal para:** Eventos jovens e descontraídos
-- **Preço:** Sob consulta
+### Responsividade
+- mobile estreito
+- mobile padrão
+- tablet
+- desktop
 
-### Carrinho de Fondue
-- **Descrição:** Elegância para eventos noturnos ou de inverno, frutas frescas com chocolate nobre
-- **Ideal para:** Casamentos e eventos sofisticados
-- **Preço:** Sob consulta (baseado em convidados)
+## Detalhes técnicos
 
----
+- preservar a configuração existente em `src/config/*`
+- concentrar o estado em uma estrutura única e determinística
+- eliminar interações com clique duplicado
+- substituir estados implícitos por validação explícita
+- usar renderização condicional simples para feedback e resultado
+- manter a calculadora 100% client-side, sem backend novo
 
-## Fase 5: Adicionais Opcionais
+## Ordem de implementação
 
-| Adicional | Preço |
-|-----------|-------|
-| Hora do Shot | R$ 250 |
-| Bartender Extra | R$ 250 |
-| Balcão de Madeira Rústico | R$ 120 |
-| Guestbook | R$ 200 |
-
----
-
-## Fase 6: Correções Gerais
-
-### Anos de Experiência
-- Alterar "10 Anos" para "5 Anos"
-- Atualizar "Fundada em 2015" para "Fundada em 2020"
-
-### Textos e Diferenciais
-- Slogan: "Aqui você não contrata apenas drinks, contrata tranquilidade"
-- Destaque: iPhone 14 Plus na Plataforma 360°
-- Badge "Best-Seller" no Bar Exclusive
-
----
-
-## Arquivos a Modificar
-
-| Arquivo | Alterações |
-|---------|------------|
-| `src/config/services.ts` | Remover 4 serviços, adicionar Totem e Milk Shake, reorganizar em categorias |
-| `src/config/pricing.ts` | Novos preços bar (Essencial/Exclusive), preços experiências, gourmet sob consulta |
-| `src/components/sections/Services.tsx` | Novo layout com 3 categorias visuais |
-| `src/components/calculator/Step3Services.tsx` | Seleção tipo bar, duração experiências, gourmet sem cálculo automático |
-| `src/components/sections/Stats.tsx` | 10 anos → 5 anos |
-| `src/components/sections/About.tsx` | Ano fundação, diferenciais |
-| `src/config/images.ts` | Adicionar/atualizar imagens dos novos serviços |
-
----
-
-## Lógica da Calculadora
-
-### Bar de Drinks
-1. Usuário seleciona "Bar de Drinks"
-2. Pergunta: "Qual cardápio?" → Essencial ou Exclusive
-3. Cálculo baseado em convidados + tipo selecionado
-
-### Experiências
-1. Usuário seleciona Plataforma 360° / Cabine / Totem
-2. Pergunta: "Por quantas horas?" → 1-4h
-3. Cálculo baseado na tabela de preços
-
-### Estação Gourmet
-1. Usuário seleciona carrinho desejado
-2. Exibe mensagem: "Preço sob consulta - será calculado conforme número de convidados"
-3. Não soma ao total, mas aparece no resumo como "A consultar"
-
----
-
-## Considerações Técnicas
-
-1. **Interface de Services:** Reorganizar com headers de categoria (Bar, Experiências, Gourmet)
-2. **Calculadora:** Serviços "sob consulta" aparecem no resumo mas não no total
-3. **Mobile:** Cards de categoria devem funcionar bem em telas pequenas
-4. **SEO:** Atualizar meta descriptions com serviços reais
-
+1. Reestruturar a experiência da calculadora em fluxo simplificado
+2. Refatorar a seleção de serviços e opções
+3. Reforçar `calculateBudget` com estados de cálculo válidos
+4. Atualizar a tela de resultado
+5. Ajustar a mensagem do WhatsApp
+6. Validar cenários principais em mobile e desktop
+7. Publicar novamente e conferir o comportamento no site publicado
