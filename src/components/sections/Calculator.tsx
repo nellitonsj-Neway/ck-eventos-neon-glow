@@ -10,6 +10,7 @@ import { CalculatorData, ServiceSelection, calculateBudget, Budget } from '@/uti
 import { Sparkles, ChevronLeft, ChevronRight, Calculator as CalcIcon } from 'lucide-react';
 import { BarType } from '@/config/pricing';
 import { cn } from '@/lib/utils';
+import { pixelEvent } from '@/lib/pixel';
 
 interface CalculatorState {
   eventType: string;
@@ -146,6 +147,11 @@ export default function Calculator() {
                 selectedEventType={state.eventType}
                 onSelect={(eventType) => {
                   setState((prev) => ({ ...prev, eventType }));
+                  // Rastrear início da jornada
+                  pixelEvent('InitiateCheckout', {
+                    content_name: 'Escolha do Tipo de Evento',
+                    content_category: eventType
+                  });
                   setTimeout(handleNext, 400);
                 }}
               />
@@ -163,7 +169,14 @@ export default function Calculator() {
                 selectedServices={state.services}
                 eventTypeId={state.eventType}
                 guests={state.guests}
-                onServicesChange={handleServicesChange}
+                onServicesChange={(services) => {
+                  handleServicesChange(services);
+                  // Rastrear personalização de serviços
+                  pixelEvent('CustomizeProduct', {
+                    content_name: 'Seleção de Serviços',
+                    num_items: services.length
+                  });
+                }}
                 onServiceOptionChange={handleServiceOptionChange}
               />
             )}
@@ -173,6 +186,11 @@ export default function Calculator() {
                 selectedDate={state.date}
                 onDateSelect={(date) => {
                   setState((prev) => ({ ...prev, date }));
+                  // Rastrear seleção de data
+                  pixelEvent('Schedule', {
+                    content_name: 'Seleção de Data',
+                    appointment_date: date.toISOString()
+                  });
                 }}
               />
             )}
