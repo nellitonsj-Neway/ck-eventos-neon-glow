@@ -20,10 +20,14 @@ export interface BudgetItem {
   details?: string;
 }
 
+export type BudgetStatus = 'calculated' | 'mixed' | 'consultation-only';
+
 export interface Budget {
   items: BudgetItem[];
   total: number;
   hasConsultationItems: boolean;
+  hasCalculatedItems: boolean;
+  status: BudgetStatus;
   min: number;
   max: number;
 }
@@ -33,6 +37,7 @@ export function calculateBudget(data: CalculatorData): Budget {
   const items: BudgetItem[] = [];
   let total = 0;
   let hasConsultationItems = false;
+  let hasCalculatedItems = false;
 
   data.services.forEach((selection) => {
     const price = getPriceForService(selection.serviceId, {
@@ -45,26 +50,34 @@ export function calculateBudget(data: CalculatorData): Budget {
     if (price === null) {
       hasConsultationItems = true;
     } else {
+      hasCalculatedItems = true;
       total += price;
     }
 
     items.push({
       serviceId: selection.serviceId,
-      serviceName: selection.serviceId, // Will be resolved by component
+      serviceName: selection.serviceId,
       price,
-      details: selection.barType 
+      details: selection.barType
         ? `Cardápio ${selection.barType === 'essencial' ? 'CK Essencial' : 'CK Exclusive'}`
-        : selection.hours 
+        : selection.hours
           ? `${selection.hours}h`
           : undefined,
     });
   });
 
+  let status: BudgetStatus;
+  if (hasCalculatedItems && hasConsultationItems) status = 'mixed';
+  else if (hasCalculatedItems) status = 'calculated';
+  else status = 'consultation-only';
+
   return {
     items,
     total,
     hasConsultationItems,
-    min: Math.round(total * 0.9),
-    max: Math.round(total * 1.2),
+    hasCalculatedItems,
+    status,
+    min: hasCalculatedItems ? Math.round(total * 0.9) : 0,
+    max: hasCalculatedItems ? Math.round(total * 1.2) : 0,
   };
 }

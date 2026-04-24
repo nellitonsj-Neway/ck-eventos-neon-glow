@@ -1,203 +1,210 @@
-import { useState } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import ProgressBar from '@/components/calculator/ProgressBar';
 import Step1EventType from '@/components/calculator/Step1EventType';
 import Step2Guests from '@/components/calculator/Step2Guests';
 import Step3Services from '@/components/calculator/Step3Services';
 import Step4Date from '@/components/calculator/Step4Date';
 import ResultScreen from '@/components/calculator/ResultScreen';
 import { CalculatorData, ServiceSelection, calculateBudget, Budget } from '@/utils/calculator';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Sparkles, AlertCircle, Calculator as CalcIcon } from 'lucide-react';
 import { BarType } from '@/config/pricing';
 
-const scrollToCalculator = () => {
-  document.getElementById('calculadora')?.scrollIntoView({ behavior: 'smooth' });
+interface CalculatorState {
+  eventType: string;
+  guests: number;
+  services: ServiceSelection[];
+  date?: Date;
+}
+
+const INITIAL_STATE: CalculatorState = {
+  eventType: '',
+  guests: 100,
+  services: [],
+  date: undefined,
 };
 
 export default function Calculator() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [showResult, setShowResult] = useState(false);
+  const [state, setState] = useState<CalculatorState>(INITIAL_STATE);
   const [budget, setBudget] = useState<Budget | null>(null);
-  
-  const [calculatorData, setCalculatorData] = useState<Partial<CalculatorData>>({
-    eventType: '',
-    guests: 100,
-    services: [],
-  });
+  const [showErrors, setShowErrors] = useState(false);
+  const resultRef = useRef<HTMLDivElement>(null);
 
-  const totalSteps = 4;
+  const errors = useMemo(() => {
+    const e: string[] = [];
+    if (!state.eventType) e.push('Selecione o tipo de evento');
+    if (state.services.length === 0) e.push('Selecione pelo menos 1 serviço');
+    if (!state.date) e.push('Selecione a data do evento');
+    return e;
+  }, [state]);
 
-  const canProceed = () => {
-    switch (currentStep) {
-      case 1:
-        return calculatorData.eventType !== '';
-      case 2:
-        return calculatorData.guests! >= 20;
-      case 3:
-        return calculatorData.services!.length > 0;
-      case 4:
-        return calculatorData.date !== undefined;
-      default:
-        return false;
+  const isValid = errors.length === 0;
+
+  const handleCalculate = () => {
+    if (!isValid) {
+      setShowErrors(true);
+      return;
     }
-  };
-
-  const getDisabledReason = () => {
-    switch (currentStep) {
-      case 1:
-        return 'Selecione o tipo de evento';
-      case 2:
-        return 'Defina o número de convidados';
-      case 3:
-        return 'Selecione pelo menos 1 serviço';
-      case 4:
-        return 'Selecione a data do evento';
-      default:
-        return '';
-    }
-  };
-
-  const handleNext = () => {
-    if (currentStep === totalSteps && canProceed()) {
-      const budget = calculateBudget(calculatorData as CalculatorData);
-      setBudget(budget);
-      setShowResult(true);
-    } else if (canProceed()) {
-      setCurrentStep(currentStep + 1);
-      scrollToCalculator();
-    }
-  };
-
-  const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-      scrollToCalculator();
-    }
+    const data: CalculatorData = {
+      eventType: state.eventType,
+      guests: state.guests,
+      services: state.services,
+      date: state.date!,
+    };
+    const result = calculateBudget(data);
+    setBudget(result);
+    setShowErrors(false);
+    setTimeout(() => {
+      resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   };
 
   const handleReset = () => {
-    setCurrentStep(1);
-    setShowResult(false);
+    setState(INITIAL_STATE);
     setBudget(null);
-    setCalculatorData({
-      eventType: '',
-      guests: 100,
-      services: [],
-    });
-    scrollToCalculator();
+    setShowErrors(false);
+    document.getElementById('calculadora')?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  // Limpa erros assim que o usuário corrige tudo
+  useEffect(() => {
+    if (showErrors && isValid) setShowErrors(false);
+  }, [isValid, showErrors]);
 
   const handleServicesChange = (services: ServiceSelection[]) => {
-    setCalculatorData({ ...calculatorData, services });
+    setState((prev) => ({ ...prev, services }));
   };
 
-  const handleServiceOptionChange = (serviceId: string, options: { barType?: BarType; hours?: number }) => {
-    const updatedServices = (calculatorData.services || []).map((s) =>
-      s.serviceId === serviceId ? { ...s, ...options } : s
-    );
-    setCalculatorData({ ...calculatorData, services: updatedServices });
+  const handleServiceOptionChange = (
+    serviceId: string,
+    options: { barType?: BarType; hours?: number }
+  ) => {
+    setState((prev) => ({
+      ...prev,
+      services: prev.services.map((s) =>
+        s.serviceId === serviceId ? { ...s, ...options } : s
+      ),
+    }));
   };
 
-  if (showResult && budget) {
+  if (budget) {
+    const data: CalculatorData = {
+      eventType: state.eventType,
+      guests: state.guests,
+      services: state.services,
+      date: state.date!,
+    };
     return (
       <section id="calculadora" className="py-20 px-4">
-        <div className="container mx-auto max-w-4xl">
-          <ResultScreen
-            data={calculatorData as CalculatorData}
-            budget={budget}
-            onReset={handleReset}
-          />
+        <div className="container mx-auto max-w-4xl" ref={resultRef}>
+          <ResultScreen data={data} budget={budget} onReset={handleReset} />
         </div>
       </section>
     );
   }
 
-  const proceed = canProceed();
-
   return (
     <section id="calculadora" className="py-20 px-4 bg-card/30">
-      <div className="container mx-auto max-w-4xl">
-        <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
-
-        <div className="min-h-[400px] sm:min-h-[500px]" key={currentStep}>
-          <div className="animate-fade-in">
-            {currentStep === 1 && (
-              <Step1EventType
-                selectedEventType={calculatorData.eventType || ''}
-                onSelect={(eventType) =>
-                  setCalculatorData({ ...calculatorData, eventType })
-                }
-              />
-            )}
-
-            {currentStep === 2 && (
-              <Step2Guests
-                guests={calculatorData.guests || 100}
-                onGuestsChange={(guests) =>
-                  setCalculatorData({ ...calculatorData, guests })
-                }
-              />
-            )}
-
-            {currentStep === 3 && (
-              <Step3Services
-                selectedServices={calculatorData.services || []}
-                eventTypeId={calculatorData.eventType || ''}
-                guests={calculatorData.guests || 100}
-                onServicesChange={handleServicesChange}
-                onServiceOptionChange={handleServiceOptionChange}
-              />
-            )}
-
-            {currentStep === 4 && (
-              <Step4Date
-                selectedDate={calculatorData.date}
-                onDateSelect={(date) =>
-                  setCalculatorData({ ...calculatorData, date })
-                }
-              />
-            )}
-          </div>
+      <div className="container mx-auto max-w-4xl space-y-12">
+        {/* Cabeçalho */}
+        <div className="text-center">
+          <CalcIcon className="w-10 h-10 mx-auto mb-3 text-primary" />
+          <h2 className="text-4xl font-bold mb-2 text-gradient-primary">
+            Calcule seu Orçamento
+          </h2>
+          <p className="text-muted-foreground">
+            Personalize seu evento e veja uma estimativa instantânea
+          </p>
         </div>
 
-        {/* Botões de navegação */}
-        <div className="flex justify-between mt-8 gap-4">
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={handleBack}
-            disabled={currentStep === 1}
-            className="gap-2"
-          >
-            <ChevronLeft className="w-5 h-5" />
-            Voltar
-          </Button>
+        {/* Etapa 1: Tipo de evento */}
+        <div className="space-y-2">
+          <SectionLabel index={1} label="Tipo de evento" done={!!state.eventType} />
+          <Step1EventType
+            selectedEventType={state.eventType}
+            onSelect={(eventType) => setState((prev) => ({ ...prev, eventType }))}
+          />
+        </div>
 
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span className="inline-flex">
-                  <Button
-                    size="lg"
-                    onClick={handleNext}
-                    disabled={!proceed}
-                    className="gap-2 glow-primary"
-                  >
-                    {currentStep === totalSteps ? 'Ver Orçamento' : 'Continuar'}
-                    <ChevronRight className="w-5 h-5" />
-                  </Button>
-                </span>
-              </TooltipTrigger>
-              {!proceed && (
-                <TooltipContent>
-                  <p>{getDisabledReason()}</p>
-                </TooltipContent>
-              )}
-            </Tooltip>
-          </TooltipProvider>
+        {/* Etapa 2: Convidados */}
+        <div className="space-y-2">
+          <SectionLabel index={2} label="Número de convidados" done={state.guests >= 20} />
+          <Step2Guests
+            guests={state.guests}
+            onGuestsChange={(guests) => setState((prev) => ({ ...prev, guests }))}
+          />
+        </div>
+
+        {/* Etapa 3: Serviços */}
+        <div className="space-y-2">
+          <SectionLabel index={3} label="Serviços" done={state.services.length > 0} />
+          <Step3Services
+            selectedServices={state.services}
+            eventTypeId={state.eventType}
+            guests={state.guests}
+            onServicesChange={handleServicesChange}
+            onServiceOptionChange={handleServiceOptionChange}
+          />
+        </div>
+
+        {/* Etapa 4: Data */}
+        <div className="space-y-2">
+          <SectionLabel index={4} label="Data do evento" done={!!state.date} />
+          <Step4Date
+            selectedDate={state.date}
+            onDateSelect={(date) => setState((prev) => ({ ...prev, date }))}
+          />
+        </div>
+
+        {/* Erros visíveis */}
+        {showErrors && errors.length > 0 && (
+          <div className="rounded-lg border-2 border-destructive bg-destructive/10 p-4 space-y-2">
+            <div className="flex items-center gap-2 font-semibold text-destructive">
+              <AlertCircle className="w-5 h-5" />
+              Para calcular, complete:
+            </div>
+            <ul className="text-sm text-destructive ml-7 list-disc space-y-1">
+              {errors.map((err) => (
+                <li key={err}>{err}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* CTA único */}
+        <div className="flex flex-col items-center gap-3 pt-4">
+          <Button
+            type="button"
+            size="lg"
+            onClick={handleCalculate}
+            className="gap-2 glow-primary text-base px-8 h-14"
+          >
+            <Sparkles className="w-5 h-5" />
+            Ver meu orçamento
+          </Button>
+          <p className="text-xs text-muted-foreground text-center">
+            Estimativa rápida e sem compromisso
+          </p>
         </div>
       </div>
     </section>
+  );
+}
+
+function SectionLabel({ index, label, done }: { index: number; label: string; done: boolean }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div
+        className={
+          done
+            ? 'flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-sm'
+            : 'flex h-8 w-8 items-center justify-center rounded-full border-2 border-border text-muted-foreground font-bold text-sm'
+        }
+      >
+        {index}
+      </div>
+      <span className={done ? 'font-semibold text-primary' : 'font-semibold text-muted-foreground'}>
+        {label}
+      </span>
+    </div>
   );
 }
