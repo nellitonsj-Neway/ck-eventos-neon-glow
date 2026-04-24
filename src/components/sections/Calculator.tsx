@@ -113,29 +113,40 @@ export default function Calculator() {
   }
 
   return (
-    <section id="calculadora" className="py-20 px-4 bg-card/30">
-      <div className="container mx-auto max-w-4xl space-y-8">
+    <section id="calculadora" className="relative py-24 px-4 overflow-hidden">
+      {/* Background patterns */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
+        <div className="absolute top-1/4 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-[120px]"></div>
+      </div>
+
+      <div className="container mx-auto max-w-5xl relative">
         {/* Cabeçalho */}
-        <div className="text-center mb-8">
-          <CalcIcon className="w-10 h-10 mx-auto mb-3 text-primary" />
-          <h2 className="text-4xl font-bold mb-2 text-gradient-primary">
-            Calcule seu Orçamento
+        <div className="text-center mb-16 space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest mb-4">
+            <CalcIcon className="w-3 h-3" />
+            Simulador Instantâneo
+          </div>
+          <h2 className="text-5xl md:text-6xl font-bold text-gradient-primary tracking-tight">
+            Seu Evento, <br />Seu Orçamento.
           </h2>
-          <p className="text-muted-foreground">
-            Personalize seu evento e veja uma estimativa instantânea em poucos passos
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Personalize cada detalhe da sua experiência neon e receba uma estimativa em tempo real.
           </p>
         </div>
 
-        <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
+        <div className="mb-12">
+          <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
+        </div>
 
-        <div className="bg-card border border-border rounded-xl p-6 sm:p-8 shadow-xl min-h-[400px] flex flex-col">
+        <div className="min-h-[500px] flex flex-col">
           <div className="flex-1">
             {currentStep === 1 && (
               <Step1EventType
                 selectedEventType={state.eventType}
                 onSelect={(eventType) => {
                   setState((prev) => ({ ...prev, eventType }));
-                  setTimeout(handleNext, 300);
+                  setTimeout(handleNext, 400);
                 }}
               />
             )}
@@ -168,34 +179,39 @@ export default function Calculator() {
           </div>
 
           {/* Navegação */}
-          <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
+          <div className={cn(
+            "flex items-center justify-between mt-12 pt-8 border-t border-white/5",
+            currentStep === 3 ? "md:sticky md:bottom-28 bg-background/80 backdrop-blur-md rounded-t-3xl p-4 md:-mx-4 z-10" : ""
+          )}>
             <Button
-              variant="outline"
+              variant="ghost"
               onClick={handleBack}
               disabled={currentStep === 1}
-              className="gap-2"
+              className="gap-2 h-14 px-8 text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-2xl transition-all"
             >
-              <ChevronLeft className="w-4 h-4" />
-              Voltar
+              <ChevronLeft className="w-5 h-5" />
+              <span className="font-semibold uppercase tracking-widest text-xs">Anterior</span>
             </Button>
 
             <Button
               onClick={handleNext}
               disabled={!isStepValid}
               className={cn(
-                "gap-2 px-8 h-12 text-base",
-                currentStep === totalSteps ? "glow-primary" : ""
+                "gap-3 px-10 h-14 text-base font-bold rounded-2xl transition-all duration-500",
+                currentStep === totalSteps 
+                  ? "bg-primary text-white glow-primary hover:scale-105" 
+                  : "bg-white/5 hover:bg-white/10 border border-white/10 hover:border-primary/50"
               )}
             >
               {currentStep === totalSteps ? (
                 <>
                   <Sparkles className="w-5 h-5" />
-                  Calcular Orçamento
+                  FINALIZAR ORÇAMENTO
                 </>
               ) : (
                 <>
-                  Próximo
-                  <ChevronRight className="w-4 h-4" />
+                  <span className="uppercase tracking-widest text-xs">Continuar</span>
+                  <ChevronRight className="w-5 h-5" />
                 </>
               )}
             </Button>
@@ -205,4 +221,5 @@ export default function Calculator() {
     </section>
   );
 }
+
 
