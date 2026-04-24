@@ -1,7 +1,6 @@
 import { services, getRecommendedServices, getServicesByCategory, serviceCategories, ServiceCategory } from '@/config/services';
 import { barMenus, BarType, getPriceForService } from '@/config/pricing';
 import { ServiceSelection } from '@/utils/calculator';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
@@ -14,6 +13,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '@/utils/formatters';
+import { Check } from 'lucide-react';
 
 interface Step3ServicesProps {
   selectedServices: ServiceSelection[];
@@ -42,7 +42,7 @@ export default function Step3Services({
   const recommendedServiceIds = getRecommendedServices(eventTypeId).map(s => s.id);
   const categories: ServiceCategory[] = ['bar', 'experiencias', 'gourmet'];
 
-  const isServiceSelected = (serviceId: string) => 
+  const isServiceSelected = (serviceId: string) =>
     selectedServices.some(s => s.serviceId === serviceId);
 
   const getServiceSelection = (serviceId: string) =>
@@ -54,14 +54,14 @@ export default function Step3Services({
     } else {
       const service = services.find(s => s.id === serviceId);
       const newSelection: ServiceSelection = { serviceId };
-      
+
       if (service?.hasBarTypeOption) {
         newSelection.barType = 'exclusive';
       }
       if (service?.hasHoursOption) {
         newSelection.hours = 3;
       }
-      
+
       onServicesChange([...selectedServices, newSelection]);
     }
   };
@@ -88,7 +88,7 @@ export default function Step3Services({
       {categories.map((category) => {
         const categoryServices = getServicesByCategory(category);
         const categoryInfo = serviceCategories[category];
-        
+
         return (
           <div key={category} className="space-y-4">
             <div className="flex items-center gap-3 pb-2 border-b border-border">
@@ -109,32 +109,36 @@ export default function Step3Services({
 
                 return (
                   <div key={service.id} className="space-y-3">
-                    <div
+                    {/* Card como botão único — clique único para evitar toggle duplicado */}
+                    <button
+                      type="button"
+                      onClick={() => handleServiceToggle(service.id)}
+                      aria-pressed={isSelected}
                       className={cn(
-                        "p-4 rounded-lg border-2 transition-all duration-300 cursor-pointer",
+                        "w-full p-4 rounded-lg border-2 transition-all duration-300 text-left",
                         isSelected
                           ? "border-primary bg-primary/10"
                           : "border-border bg-card hover:border-primary/50"
                       )}
-                      onClick={() => handleServiceToggle(service.id)}
                     >
                       <div className="flex items-start gap-4">
-                        <Checkbox
-                          id={service.id}
-                          checked={isSelected}
-                          onCheckedChange={() => handleServiceToggle(service.id)}
-                          className="mt-1"
-                        />
-                        
+                        {/* Indicador visual de seleção (não interativo) */}
+                        <div
+                          className={cn(
+                            "mt-1 h-5 w-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors",
+                            isSelected
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-muted-foreground/40"
+                          )}
+                          aria-hidden="true"
+                        >
+                          {isSelected && <Check className="h-3.5 w-3.5" />}
+                        </div>
+
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap mb-2">
                             <Icon className="w-5 h-5 text-primary flex-shrink-0" />
-                            <Label
-                              htmlFor={service.id}
-                              className="text-lg font-semibold cursor-pointer"
-                            >
-                              {service.name}
-                            </Label>
+                            <span className="text-lg font-semibold">{service.name}</span>
                           </div>
 
                           {/* Badges inline */}
@@ -171,11 +175,14 @@ export default function Step3Services({
                           )}
                         </div>
                       </div>
-                    </div>
+                    </button>
 
-                    {/* Opção de tipo de Bar */}
+                    {/* Opção de tipo de Bar — fora do botão para evitar nested interactive */}
                     {isSelected && service.hasBarTypeOption && (
-                      <div className="ml-2 sm:ml-12 p-4 rounded-lg bg-muted/50 space-y-4">
+                      <div
+                        className="ml-2 sm:ml-12 p-4 rounded-lg bg-muted/50 space-y-4"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <Label className="text-sm font-medium">Qual cardápio você prefere?</Label>
                         <RadioGroup
                           value={selection?.barType || 'exclusive'}
@@ -208,7 +215,10 @@ export default function Step3Services({
 
                     {/* Opção de horas para experiências */}
                     {isSelected && service.hasHoursOption && (
-                      <div className="ml-2 sm:ml-12 p-4 rounded-lg bg-muted/50 space-y-3">
+                      <div
+                        className="ml-2 sm:ml-12 p-4 rounded-lg bg-muted/50 space-y-3"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <Label className="text-sm font-medium">Por quantas horas?</Label>
                         <Select
                           value={selection?.hours?.toString() || '3'}
@@ -240,11 +250,14 @@ export default function Step3Services({
         <p className="text-sm text-muted-foreground">
           {selectedServices.length} {selectedServices.length === 1 ? 'serviço selecionado' : 'serviços selecionados'}
         </p>
-        {selectedServices.length > 0 && (
+        {selectedServices.length > 0 && subtotal > 0 && (
           <p className="text-lg font-bold text-primary">
             Estimativa: {formatCurrency(subtotal)}
             {hasConsultation && <span className="text-sm font-normal text-muted-foreground ml-2">+ itens sob consulta</span>}
           </p>
+        )}
+        {selectedServices.length > 0 && subtotal === 0 && hasConsultation && (
+          <p className="text-lg font-bold text-amber-500">Sob consulta</p>
         )}
       </div>
     </div>

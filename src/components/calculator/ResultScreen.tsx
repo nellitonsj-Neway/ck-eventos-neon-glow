@@ -5,7 +5,17 @@ import { getBarMenu } from '@/config/pricing';
 import { formatCurrency, formatDate, getDayOfWeek } from '@/utils/formatters';
 import { sendCalculatorToWhatsApp } from '@/lib/whatsapp';
 import { Button } from '@/components/ui/button';
-import { MessageCircle, RefreshCcw, Sparkles, DollarSign, AlertTriangle, ClipboardList, Users, CalendarDays, Target } from 'lucide-react';
+import {
+  MessageCircle,
+  RefreshCcw,
+  Sparkles,
+  DollarSign,
+  AlertTriangle,
+  ClipboardList,
+  Users,
+  CalendarDays,
+  Target,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface ResultScreenProps {
@@ -17,26 +27,25 @@ interface ResultScreenProps {
 export default function ResultScreen({ data, budget, onReset }: ResultScreenProps) {
   const [animatedMin, setAnimatedMin] = useState(0);
   const [animatedMax, setAnimatedMax] = useState(0);
-  
+
   const eventType = getEventTypeById(data.eventType);
   const dateStr = formatDate(data.date);
   const dayOfWeek = getDayOfWeek(data.date);
 
   useEffect(() => {
+    if (!budget.hasCalculatedItems) return;
     const duration = 1500;
     const steps = 60;
     const stepDuration = duration / steps;
-    
+
     let currentStep = 0;
     const interval = setInterval(() => {
       currentStep++;
       const progress = currentStep / steps;
       setAnimatedMin(Math.round(budget.min * progress));
       setAnimatedMax(Math.round(budget.max * progress));
-      
-      if (currentStep >= steps) {
-        clearInterval(interval);
-      }
+
+      if (currentStep >= steps) clearInterval(interval);
     }, stepDuration);
 
     return () => clearInterval(interval);
@@ -56,9 +65,7 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
         <h2 className="text-4xl font-bold mb-2 text-gradient-primary">
           Seu Orçamento Estimado
         </h2>
-        <p className="text-muted-foreground">
-          Veja a estimativa para o seu evento
-        </p>
+        <p className="text-muted-foreground">Veja a estimativa para o seu evento</p>
       </div>
 
       {/* Box do orçamento */}
@@ -68,23 +75,35 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
             <DollarSign className="w-5 h-5" />
             Investimento Estimado
           </div>
-          
-          <div className="text-xl sm:text-4xl md:text-6xl font-bold text-gradient-primary break-words">
-            {formatCurrency(animatedMin)} - {formatCurrency(animatedMax)}
-          </div>
-          
-          {budget.hasConsultationItems && (
-            <div className="text-sm text-amber-500 font-medium flex items-center justify-center gap-1.5">
-              <AlertTriangle className="w-4 h-4" />
-              Alguns serviços têm preço sob consulta e não estão incluídos neste valor
+
+          {budget.status === 'consultation-only' ? (
+            <div className="space-y-2">
+              <div className="text-3xl sm:text-4xl font-bold text-amber-500">Sob consulta</div>
+              <p className="text-sm text-muted-foreground">
+                Os serviços selecionados precisam de orçamento personalizado.
+                Fale com nossa equipe pelo WhatsApp.
+              </p>
             </div>
+          ) : (
+            <>
+              <div className="text-xl sm:text-4xl md:text-6xl font-bold text-gradient-primary break-words">
+                {formatCurrency(animatedMin)} - {formatCurrency(animatedMax)}
+              </div>
+
+              {budget.status === 'mixed' && (
+                <div className="text-sm text-amber-500 font-medium flex items-center justify-center gap-1.5">
+                  <AlertTriangle className="w-4 h-4" />
+                  Alguns serviços têm preço sob consulta e não estão incluídos neste valor
+                </div>
+              )}
+            </>
           )}
-          
+
           <div className="pt-4 border-t border-primary/20">
             <p className="text-sm text-muted-foreground flex items-start gap-2 justify-center">
               <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span className="max-w-md">
-                <strong>Valores aproximados.</strong> Para um orçamento detalhado e personalizado, 
+                <strong>Valores aproximados.</strong> Para um orçamento detalhado e personalizado,
                 converse com nossa equipe pelo WhatsApp!
               </span>
             </p>
@@ -98,23 +117,25 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
           <ClipboardList className="w-5 h-5 text-primary" />
           Resumo do Evento
         </h3>
-        
+
         <div className="space-y-3 text-sm">
           <div className="flex items-center gap-2">
             {EventIcon && <EventIcon className="w-5 h-5 text-primary" />}
             <span className="font-semibold">{eventType?.name}</span>
           </div>
-          
+
           <div className="flex items-center gap-2 text-muted-foreground">
             <Users className="w-4 h-4" />
             <span>{data.guests} convidados</span>
           </div>
-          
+
           <div className="flex items-center gap-2 text-muted-foreground">
             <CalendarDays className="w-4 h-4" />
-            <span>{dateStr} ({dayOfWeek})</span>
+            <span>
+              {dateStr} ({dayOfWeek})
+            </span>
           </div>
-          
+
           <div className="pt-3 border-t border-border">
             <div className="font-semibold mb-2 flex items-center gap-2">
               <Target className="w-4 h-4 text-primary" />
@@ -125,7 +146,7 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
                 const service = getServiceById(selection.serviceId);
                 let serviceName = service?.name || selection.serviceId;
                 let details = '';
-                
+
                 if (selection.barType) {
                   const menu = getBarMenu(selection.barType);
                   details = ` (${menu?.name || selection.barType})`;
@@ -136,10 +157,11 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
                 if (service?.isUnderConsultation) {
                   details += ' - Sob consulta';
                 }
-                
+
                 return (
                   <li key={selection.serviceId} className="text-muted-foreground">
-                    • {serviceName}{details}
+                    • {serviceName}
+                    {details}
                   </li>
                 );
               })}

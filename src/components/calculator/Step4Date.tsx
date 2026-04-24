@@ -9,6 +9,10 @@ interface Step4DateProps {
 }
 
 export default function Step4Date({ selectedDate, onDateSelect }: Step4DateProps) {
+  // Comparação por dia (sem horas) para não bloquear o dia atual
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   return (
     <div className="space-y-6">
       <div className="text-center">
@@ -38,7 +42,11 @@ export default function Step4Date({ selectedDate, onDateSelect }: Step4DateProps
             mode="single"
             selected={selectedDate}
             onSelect={onDateSelect}
-            disabled={(date) => date < new Date()}
+            disabled={(date) => {
+              const d = new Date(date);
+              d.setHours(0, 0, 0, 0);
+              return d < today;
+            }}
             initialFocus
             className={cn(
               "p-4 rounded-lg border border-border bg-card pointer-events-auto"
@@ -48,7 +56,7 @@ export default function Step4Date({ selectedDate, onDateSelect }: Step4DateProps
 
         <p className="text-center text-sm text-muted-foreground flex items-center justify-center gap-1.5">
           <Lightbulb className="w-4 h-4" />
-          Selecione apenas datas futuras
+          Selecione uma data a partir de hoje
         </p>
       </div>
     </div>

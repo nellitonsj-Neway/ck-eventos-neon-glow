@@ -22,13 +22,12 @@ export function formatCalculatorMessage(
 ): string {
   const eventType = getEventTypeById(data.eventType);
   const eventName = eventType ? eventType.name : data.eventType;
-  
+
   const servicesText = data.services
     .map((selection) => {
       const service = getServiceById(selection.serviceId);
       let serviceName = service?.name || selection.serviceId;
-      
-      // Adicionar detalhes específicos
+
       if (selection.barType) {
         const menu = getBarMenu(selection.barType);
         serviceName += ` (${menu?.name || selection.barType})`;
@@ -39,14 +38,19 @@ export function formatCalculatorMessage(
       if (service?.isUnderConsultation) {
         serviceName += ' - Sob consulta';
       }
-      
+
       return `✓ ${serviceName}`;
     })
     .join('\n');
 
-  const consultationNote = budget.hasConsultationItems 
-    ? '\n\n⚠️ *Nota:* Alguns serviços têm preço sob consulta e não estão incluídos na estimativa acima.'
-    : '';
+  let estimateBlock = '';
+  if (budget.status === 'consultation-only') {
+    estimateBlock = `💰 *Estimativa:*\nSob consulta (todos os serviços selecionados precisam de orçamento personalizado).`;
+  } else if (budget.status === 'mixed') {
+    estimateBlock = `💰 *Estimativa Calculada:*\n${formatCurrency(budget.min)} - ${formatCurrency(budget.max)}\n\n⚠️ *Nota:* Alguns serviços têm preço sob consulta e não estão incluídos na estimativa acima.`;
+  } else {
+    estimateBlock = `💰 *Estimativa Calculada:*\n${formatCurrency(budget.min)} - ${formatCurrency(budget.max)}`;
+  }
 
   const message = `🎉 *Solicitação de Orçamento - CK Eventos*
 
@@ -60,8 +64,7 @@ Data Pretendida: ${formatDate(data.date)}
 🎯 *Serviços de Interesse:*
 ${servicesText}
 
-💰 *Estimativa Calculada:*
-${formatCurrency(budget.min)} - ${formatCurrency(budget.max)}${consultationNote}
+${estimateBlock}
 
 Aguardo retorno para mais informações! 🙏`;
 
