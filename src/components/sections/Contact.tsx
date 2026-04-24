@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { generateWhatsAppMessage } from '@/utils/mailto';
+import { pixelEvent } from '@/lib/pixel';
 import { MapPin, Phone, Mail, Clock, Instagram, Facebook } from 'lucide-react';
 import { eventTypes } from '@/config/eventTypes';
 
@@ -52,6 +53,12 @@ export default function Contact() {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
+    
+    // Rastrear Lead ao enviar formulário
+    pixelEvent('Lead', {
+      content_name: 'Formulário de Contato',
+      content_category: data.eventType,
+    });
     
     // Simulate form submission and open WhatsApp
     setTimeout(() => {
@@ -220,7 +227,11 @@ export default function Contact() {
                 <Phone className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                 <div className="min-w-0">
                   <p className="font-semibold mb-1">Telefone</p>
-                  <a href="tel:+5531993436059" className="text-muted-foreground hover:text-primary">
+                  <a 
+                    href="tel:+5531993436059" 
+                    className="text-muted-foreground hover:text-primary"
+                    onClick={() => pixelEvent('Contact', { content_name: 'Clique Telefone' })}
+                  >
                     (31) 99343-6059
                   </a>
                 </div>
@@ -230,7 +241,11 @@ export default function Contact() {
                 <Mail className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                 <div className="min-w-0">
                   <p className="font-semibold mb-1">Email</p>
-                  <a href="mailto:ckeventos.s@gmail.com" className="text-muted-foreground hover:text-primary break-all">
+                  <a 
+                    href="mailto:ckeventos.s@gmail.com" 
+                    className="text-muted-foreground hover:text-primary break-all"
+                    onClick={() => pixelEvent('Contact', { content_name: 'Clique Email' })}
+                  >
                     ckeventos.s@gmail.com
                   </a>
                 </div>
@@ -271,6 +286,7 @@ export default function Contact() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-3 rounded-lg bg-muted hover:bg-primary/10 hover:text-primary transition-colors"
+                    onClick={() => pixelEvent('Contact', { content_name: 'Instagram' })}
                   >
                     <Instagram className="w-6 h-6" />
                   </a>
@@ -279,6 +295,7 @@ export default function Contact() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-3 rounded-lg bg-muted hover:bg-primary/10 hover:text-primary transition-colors"
+                    onClick={() => pixelEvent('Contact', { content_name: 'Facebook' })}
                   >
                     <Facebook className="w-6 h-6" />
                   </a>

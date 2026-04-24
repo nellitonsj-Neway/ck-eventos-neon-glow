@@ -1,7 +1,11 @@
 import { sendSimpleWhatsAppMessage } from '@/lib/whatsapp';
+import { pixelEvent } from '@/lib/pixel';
 
 export default function FloatingWhatsApp() {
   const handleClick = () => {
+    pixelEvent('Contact', {
+      content_name: 'Botão Flutuante WhatsApp',
+    });
     sendSimpleWhatsAppMessage(
       'Olá! Vim pelo site e gostaria de mais informações sobre os serviços da CK Eventos!'
     );

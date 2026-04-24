@@ -4,6 +4,7 @@ import { getServiceById } from '@/config/services';
 import { getBarMenu } from '@/config/pricing';
 import { formatCurrency, formatDate, getDayOfWeek } from '@/utils/formatters';
 import { sendCalculatorToWhatsApp } from '@/lib/whatsapp';
+import { pixelEvent } from '@/lib/pixel';
 import { Button } from '@/components/ui/button';
 import {
   MessageCircle,
@@ -48,10 +49,25 @@ export default function ResultScreen({ data, budget, onReset }: ResultScreenProp
       if (currentStep >= steps) clearInterval(interval);
     }, stepDuration);
 
+    // Rastrear que um orçamento foi gerado
+    pixelEvent('ViewContent', {
+      content_name: 'Calculadora de Eventos',
+      content_category: eventType?.name || 'Evento',
+      value: budget.max,
+      currency: 'BRL'
+    });
+
     return () => clearInterval(interval);
-  }, [budget]);
+  }, [budget, eventType]);
 
   const handleWhatsAppClick = () => {
+    // Rastrear lead ao clicar para contato
+    pixelEvent('Lead', {
+      content_name: 'Solicitação de Orçamento WhatsApp',
+      content_category: eventType?.name || 'Evento',
+      value: budget.max,
+      currency: 'BRL'
+    });
     sendCalculatorToWhatsApp(data, budget);
   };
 
